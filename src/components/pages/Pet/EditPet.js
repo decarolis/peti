@@ -1,32 +1,75 @@
+import { useState, useEffect, useContext } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
-
-import { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-
-import styles from './AddPet.module.css';
-
 import PetForm from '../../form/PetForm';
+
+/* css */
+import styles from './AddPet.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
 
+/* contexts */
+import { Context } from '../../../context/UserContext';
+
 function EditPet() {
   const [pet, setPet] = useState({});
+  const [loading, setLoading] = useState(true);
   const [token] = useState(localStorage.getItem('token') || '');
   const { id } = useParams();
   const { setFlashMessage } = useFlashMessage();
+  const navigate = useNavigate();
+  const { logout, authenticated } = useContext(Context);
+
+  console.log(authenticated);
+
+  const helpState = tempPet => {
+    setPet(tempPet);
+    setLoading(false);
+  };
 
   useEffect(() => {
-    api
-      .get(`/pets/${id}`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(token)}`,
-        },
-      })
-      .then(response => {
-        setPet(response.data.pet);
-      });
-  }, [token, id]);
+    console.log('oi effect');
+    let tempPet;
+    let mounted = true;
+    if (token && loading) {
+      console.log('oi effect REQ');
+      api
+        .get(`/pets/${id}`, {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(token)}`,
+          },
+        })
+        .then(response => {
+          console.log(response.data);
+          if (response.data.isOwner) {
+            if (mounted) {
+              tempPet = response.data.pet;
+              helpState(tempPet);
+            }
+          } else {
+            if (mounted) {
+              navigate('/pet/mypets');
+            }
+          }
+        })
+        .catch(() => {
+          if (mounted) {
+            logout(
+              'Faça login ou registre-se para visitar esta página.',
+              'error',
+            );
+          }
+        });
+    } else if (!token) {
+      if (mounted) {
+        logout('Faça login ou registre-se para visitar esta página.', 'error');
+      }
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [token, id, navigate, logout, loading]);
 
   async function updatePet(pet) {
     let msgType = 'success';
@@ -37,6 +80,10 @@ function EditPet() {
       if (key === 'images') {
         for (let i = 0; i < pet[key].length; i++) {
           formData.append(`images`, pet[key][i]);
+        }
+      } else if (key === 'latLong') {
+        for (let i = 0; i < pet[key].length; i++) {
+          formData.append(`latLong`, pet[key][i]);
         }
       } else {
         formData.append(key, pet[key]);
@@ -53,7 +100,6 @@ function EditPet() {
         },
       })
       .then(response => {
-        console.log(response.data);
         return response.data;
       })
       .catch(err => {
@@ -63,6 +109,9 @@ function EditPet() {
       });
 
     setFlashMessage(data.message, msgType);
+    if (msgType === 'success') {
+      navigate('/pet/mypets');
+    }
   }
 
   return (
@@ -71,8 +120,13 @@ function EditPet() {
         <h1>Editando o Pet: {pet.name}</h1>
         <p>Depois da edição os dados serão atualizados no sistema</p>
       </div>
-      {pet.name && (
-        <PetForm handleSubmit={updatePet} petData={pet} btnText="Editar" />
+      {!loading && (
+        <PetForm
+          handleSubmit={updatePet}
+          petData={pet}
+          petPosition={pet.latLong}
+          btnText="Editar"
+        />
       )}
     </section>
   );

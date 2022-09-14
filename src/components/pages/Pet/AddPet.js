@@ -1,11 +1,10 @@
-import api from '../../../utils/api';
-
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-
-import styles from './AddPet.module.css';
-
+import api from '../../../utils/api';
 import PetForm from '../../form/PetForm';
+
+/* css */
+import styles from './AddPet.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -25,6 +24,10 @@ function AddPet() {
         for (let i = 0; i < pet[key].length; i++) {
           formData.append(`images`, pet[key][i]);
         }
+      } else if (key === 'latLong') {
+        for (let i = 0; i < pet[key].length; i++) {
+          formData.append(`latLong`, pet[key][i]);
+        }
       } else {
         formData.append(key, pet[key]);
       }
@@ -40,17 +43,17 @@ function AddPet() {
         },
       })
       .then(response => {
-        console.log(response.data);
         return response.data;
       })
       .catch(err => {
-        console.log(err);
         msgType = 'error';
         return err.response.data;
       });
 
     setFlashMessage(data.message, msgType);
-    navigate('/pet/mypets');
+    if (msgType === 'success') {
+      navigate('/pet/mypets');
+    }
   }
 
   return (

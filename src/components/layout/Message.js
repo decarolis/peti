@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import bus from '../../utils/bus';
 
-import styles from './Message.module.css';
+/* css */
+import styles from './Message.module.scss';
 
 function Message() {
   let [visibility, setVisibility] = useState(false);
@@ -29,7 +30,7 @@ function Message() {
 
   return (
     visibility && (
-      <div className={`${styles.message} ${styles[type]}`}>{message}</div>
+      <div className={`${styles.message} ${styles[type]} close`}>{message}</div>
     )
   );
 }

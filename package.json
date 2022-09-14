@@ -12,8 +12,10 @@
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
     "react-icons": "^4.2.0",
+    "react-leaflet": "3.2.0",
     "react-router-dom": "^6.3.0",
     "react-scripts": "4.0.3",
+    "sass": "^1.54.9",
     "web-vitals": "1.0.1"
   },
   "scripts": {
@@ -28,17 +30,13 @@
       "react-app/jest"
     ]
   },
-  "browserslist": {
-    "production": [
-      ">0.2%",
-      "not dead",
-      "not op_mini all"
-    ],
-    "development": [
-      "last 1 chrome version",
-      "last 1 firefox version",
-      "last 1 safari version"
-    ]
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not op_mini all"
+  ],
+  "overrides": {
+    "react-error-overlay": "6.0.9"
   },
   "devDependencies": {
     "eslint": "^7.32.0",

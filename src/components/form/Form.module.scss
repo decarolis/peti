@@ -5,6 +5,25 @@
   border-radius: 15px;
 }
 
+.form_container .p_label{
+  margin-bottom: 0.3em;
+  font-weight: bold;
+  font-size: 0.8em;
+}
+
+.form_container .p_error{
+  margin-top: 0.3em;
+  margin-bottom: 0.3em;
+  font-size: 0.8em;
+  color: #721c24;
+}
+
+.form_container .input_age{
+  max-width: 100%;
+  display: flex;
+  justify-content: space-between;
+}
+
 .form_container input[type='submit'] {
   border-radius: 8px;
   background-color: #25b456;
@@ -22,11 +41,11 @@
   background-color: #1c8a42;
 }
 
-.form_container p {
+.form_container .p_link {
   margin-top: 1em;
 }
 
-.form_container p a {
+.form_container .p_link a {
   color: #16479d;
   font-weight: bold;
 }

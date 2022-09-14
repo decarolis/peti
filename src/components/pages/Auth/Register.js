@@ -1,8 +1,9 @@
 import { useState, useContext } from 'react';
-import Input from '../../form/Input';
 import { Link } from 'react-router-dom';
+import Input from '../../form/Input';
 
-import styles from '../../form/Form.module.css';
+/* css */
+import styles from '../../form/Form.module.scss';
 
 /* contexts */
 import { Context } from '../../../context/UserContext';
@@ -61,7 +62,7 @@ function Register() {
         />
         <input type="submit" value="Cadastrar" />
       </form>
-      <p>
+      <p className={styles.p_link}>
         Já tem conta? <Link to="/login">Clique aqui.</Link>
       </p>
     </section>

@@ -1,10 +1,10 @@
 import { useState, useEffect, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import RoundedImage from '../../layout/RoundedImage';
 
 /* css */
-import styles from './Dashboard.module.scss';
+import styles from '../Pet/Dashboard.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -12,18 +12,19 @@ import useFlashMessage from '../../../hooks/useFlashMessage';
 /* contexts */
 import { Context } from '../../../context/UserContext';
 
-function MyPets() {
+function Favorites() {
   const [pets, setPets] = useState([]);
-  const [token] = useState(localStorage.getItem('token') || '');
   const [loading, setLoading] = useState(true);
+  const [token] = useState(localStorage.getItem('token') || '');
   const { setFlashMessage } = useFlashMessage();
+  const navigate = useNavigate();
   const { logout } = useContext(Context);
 
   useEffect(() => {
     let mounted = true;
     if (token && loading) {
       api
-        .get('/pets/mypets', {
+        .get('/users/favorites', {
           headers: {
             Authorization: `Bearer ${JSON.parse(token)}`,
           },
@@ -50,28 +51,27 @@ function MyPets() {
     return () => {
       mounted = false;
     };
-  }, [token, logout, loading]);
+  }, [token, logout, navigate, loading]);
 
-  async function removePet(id) {
-    let msgType = 'success';
-
-    const data = await api
-      .delete(`/pets/${id}`, {
-        headers: {
-          Authorization: `Bearer ${JSON.parse(token)}`,
+  async function disfavorPet(id) {
+    await api
+      .patch(
+        `/users/favorites/${id}`,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(token)}`,
+          },
         },
-      })
-      .then(response => {
+      )
+      .then(() => {
         const updatedPets = pets.filter(pet => pet._id !== id);
         setPets(updatedPets);
-        return response.data;
       })
       .catch(err => {
-        msgType = 'error';
-        return err.response.data;
+        const msgType = 'error';
+        setFlashMessage(err.response.data.message, msgType);
       });
-
-    setFlashMessage(data.message, msgType);
   }
 
   return (
@@ -79,8 +79,7 @@ function MyPets() {
       {!loading && (
         <section>
           <div className={styles.petslist_header}>
-            <h1>Meus Pets Cadastrados</h1>
-            <Link to="/pet/add">Cadastrar Pet</Link>
+            <h1>Meus favoritos</h1>
           </div>
           <div className={styles.petslist_container}>
             {pets.length > 0 ? (
@@ -95,10 +94,9 @@ function MyPets() {
                   <div className={styles.actions}>
                     {pet.active ? (
                       <>
-                        <Link to={`/pet/edit/${pet._id}`}>Editar</Link>
                         <button
                           onClick={() => {
-                            removePet(pet._id);
+                            disfavorPet(pet._id);
                           }}
                         >
                           Excluir
@@ -111,7 +109,7 @@ function MyPets() {
                 </div>
               ))
             ) : (
-              <p>Ainda não há pets cadastrados!</p>
+              <p>Ainda não há pets favoritos!</p>
             )}
           </div>
         </section>
@@ -120,4 +118,4 @@ function MyPets() {
   );
 }
 
-export default MyPets;
+export default Favorites;

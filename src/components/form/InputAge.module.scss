@@ -1,0 +1,31 @@
+.form_control {
+  display: flex;
+  width: 145px;
+  border: 1px solid #777;
+  border-radius: 5px;
+  margin-bottom: 1em;
+  overflow: auto;
+  font-size: 0.8em;
+}
+
+.form_control .fixed_text {
+  z-index: 0;
+  margin-right: 1em;
+  padding: 0.7em;
+
+}
+
+.form_control input {
+  width: 145px;
+  border-radius: 5px;
+  overflow: auto;
+  border: none;
+  outline: none;
+  margin: 0px;
+  padding: 0px;
+  z-index: 1;
+}
+
+.form_control input::placeholder {
+  color: #999;
+}

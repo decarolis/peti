@@ -1,4 +1,4 @@
-import styles from './RoundedImage.module.css';
+import styles from './RoundedImage.module.scss';
 
 function RoundedImage({ src, alt, width }) {
   return (

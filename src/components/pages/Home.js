@@ -1,49 +1,232 @@
 import api from '../../utils/api';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import { BsSuitHeart, BsFillSuitHeartFill } from 'react-icons/bs';
+import { GiWeight, GiSandsOfTime } from 'react-icons/gi';
+import {
+  TbGenderMale,
+  TbGenderFemale,
+  TbGenderBigender,
+  TbInfoCircle,
+  TbMapPin,
+} from 'react-icons/tb';
 
-import styles from './Home.module.css';
+/* css*/
+import styles from './Home.module.scss';
+
+/* hooks */
+import useFlashMessage from '../../hooks/useFlashMessage';
 
 function Home() {
   const [pets, setPets] = useState([]);
+  const [token] = useState(localStorage.getItem('token') || '');
+  const [loading, setLoading] = useState(true);
+  const [favorites, setFavorites] = useState([]);
+  const { setFlashMessage } = useFlashMessage();
+  const navigate = useNavigate();
+
+  const helpState = (tempPets, tempFavorites = []) => {
+    setLoading(false);
+    setPets(tempPets);
+    setFavorites(tempFavorites);
+  };
 
   useEffect(() => {
-    api.get('/pets').then(response => {
-      setPets(response.data.pets);
-    });
-  }, []);
+    let tempPets, tempFavorites;
+    let mounted = true;
+    if (token && loading) {
+      api
+        .get('pets')
+        .then(response => {
+          tempPets = response.data.pets;
+        })
+        .then(() => {
+          api
+            .get('/users/favorites', {
+              headers: {
+                Authorization: `Bearer ${JSON.parse(token)}`,
+              },
+            })
+            .then(response => {
+              const fav = [];
+              for (let i = 0; i < response.data.pets.length; i++) {
+                fav.push(response.data.pets[i]._id);
+              }
+              tempFavorites = fav;
+              if (mounted) {
+                helpState(tempPets, tempFavorites);
+              }
+            });
+        })
+        .catch(() => {
+          if (mounted) {
+            setFlashMessage(
+              'Houve um problema ao processar sua solicitação, tente novamente mais tarde!',
+              'error',
+            );
+          }
+        });
+    } else if (!token && loading) {
+      api
+        .get('pets')
+        .then(response => {
+          if (mounted) {
+            tempPets = response.data.pets;
+            helpState(tempPets);
+          }
+        })
+        .catch(() => {
+          if (mounted) {
+            setFlashMessage(
+              'Houve um problema ao processar sua solicitação, tente novamente mais tarde!',
+              'error',
+            );
+          }
+        });
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [setFlashMessage, token, loading]);
+
+  async function handleFavorites(id, action) {
+    if (token) {
+      await api
+        .patch(
+          `/users/favorites/${id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${JSON.parse(token)}`,
+            },
+          },
+        )
+        .then(() => {
+          let updatedFavorites = [];
+          if (action === 'remove') {
+            updatedFavorites = favorites.filter(item => item !== id);
+          } else if (action === 'add') {
+            updatedFavorites = [...favorites, id];
+          }
+          setFavorites(updatedFavorites);
+        })
+        .catch(err => {
+          const msgType = 'error';
+          const msgText = err.response.data.message.toString();
+          setFlashMessage(msgText, msgType);
+        });
+    } else {
+      setFlashMessage(
+        'Faça login ou registre-se para adicionar aos favoritos',
+        'error',
+      );
+    }
+  }
+
+  function sexSwitch(param) {
+    switch (param) {
+      case 'Macho':
+        return <TbGenderMale />;
+      case 'Fêmea':
+        return <TbGenderFemale />;
+      case 'Indefinido':
+        return <TbGenderBigender />;
+      default:
+        return '';
+    }
+  }
+
+  function handleButtonDetails(id) {
+    if (token) {
+      navigate(`/pet/${id}`);
+    } else {
+      setFlashMessage(
+        'Faça login ou registre-se para ver detalhes do pet',
+        'error',
+      );
+    }
+  }
 
   return (
     <section>
-      <div className={styles.pet_home_header}>
-        <h1>Adote um Pet</h1>
-        <p>Veja os detalhes de cada um e conheça o tutor deles</p>
-      </div>
-      <div className={styles.pet_container}>
-        {pets.length > 0 &&
-          pets.map(pet => (
-            <div className={styles.pet_card} key={pet._id}>
-              <div
-                style={{
-                  backgroundImage: `url(${process.env.REACT_APP_API}/images/pets/${pet.images[0]})`,
-                }}
-                className={styles.pet_card_image}
-              ></div>
-              <h3>{pet.name}</h3>
-              <p>
-                <span className="bold">Peso:</span> {pet.weight}kg
-              </p>
-              {pet.available ? (
-                <Link to={`/pet/${pet._id}`}>Mais detalhes</Link>
-              ) : (
-                <p className={styles.adopted_text}>Adotado!</p>
-              )}
-            </div>
-          ))}
-        {pets.length === 0 && (
-          <p>Não há pets cadastrados ou disponíveis para adoção no momento!</p>
-        )}
-      </div>
+      <h1>Adote um Pet</h1>
+      {!loading && (
+        <div className={styles.pet_container}>
+          {pets.length > 0 ? (
+            pets.map(pet => (
+              <div className={styles.pet_card} key={pet._id}>
+                <div
+                  style={{
+                    backgroundImage: `url(${process.env.REACT_APP_API}/images/pets/${pet.images[0]})`,
+                  }}
+                  className={styles.pet_card_image}
+                ></div>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
+                  <h3>{pet.name}</h3>
+                  {favorites.includes(pet._id) ? (
+                    <BsFillSuitHeartFill
+                      onClick={() => handleFavorites(pet._id, 'remove')}
+                      className={styles.red_heart}
+                    />
+                  ) : (
+                    <BsSuitHeart
+                      onClick={() => handleFavorites(pet._id, 'add')}
+                      className={styles.heart}
+                    />
+                  )}
+                </div>
+                <p>
+                  <span>
+                    <TbInfoCircle />
+                  </span>
+                  {` ${pet.type}, ${pet.specificType}`}
+                </p>
+                <p>
+                  <span>{sexSwitch(pet.sex)}</span>
+                  {` ${pet.sex}`}
+                </p>
+                <p>
+                  <span>
+                    <GiSandsOfTime />
+                  </span>
+                  {pet.years === 0
+                    ? ''
+                    : pet.years === 1
+                    ? ` ${pet.years} ano`
+                    : ` ${pet.years} anos`}
+                  {pet.years > 0 && pet.months > 0 ? ' e ' : ''}
+                  {pet.months === 0
+                    ? ''
+                    : pet.months === 1
+                    ? ` ${pet.months} mês`
+                    : ` ${pet.months} meses`}
+                </p>
+                <p>
+                  <span>
+                    <GiWeight />
+                  </span>
+                  {` ${pet.weight} `}kg
+                </p>
+                <p>
+                  <span>
+                    <TbMapPin />
+                  </span>
+                  {` ${pet.state},  ${pet.city}`}
+                </p>
+                <button onClick={() => handleButtonDetails(pet._id)}>
+                  Mais detalhes
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>
+              Não há pets cadastrados ou disponíveis para adoção no momento!
+            </p>
+          )}
+        </div>
+      )}
     </section>
   );
 }

@@ -11,14 +11,22 @@ export default function useAuth() {
   const { setFlashMessage } = useFlashMessage();
 
   useEffect(() => {
+    let mounted = true;
+
     const token = localStorage.getItem('token');
 
     if (token) {
       api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-      setAuthenticated(true);
+      if (mounted) {
+        setAuthenticated(true);
+      }
     }
-
-    setLoading(false);
+    if (mounted) {
+      setLoading(false);
+    }
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   async function register(user) {
@@ -66,10 +74,10 @@ export default function useAuth() {
     navigate('/');
   }
 
-  function logout() {
-    const msgText = 'Logout realizado com sucesso!';
-    const msgType = 'success';
-
+  function logout(
+    msgText = 'Logout realizado com sucesso!',
+    msgType = 'success',
+  ) {
     setAuthenticated(false);
     localStorage.removeItem('token');
     api.defaults.headers.Authorization = undefined;

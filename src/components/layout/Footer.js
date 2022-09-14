@@ -1,10 +1,10 @@
-import styles from './Footer.module.css';
+import styles from './Footer.module.scss';
 
 function Footer() {
   return (
     <footer className={styles.footer}>
       <p>
-        <b>Get A Pet</b> &copy; 2021
+        <b>Peti</b> &copy; 2022
       </p>
     </footer>
   );

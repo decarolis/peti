@@ -1,34 +1,28 @@
-import styles from './Input.module.scss';
+import styles from './TextArea.module.scss';
 
-function Input({
-  type,
+function TextArea({
   text,
   name,
   placeholder,
   handleOnChange,
   value,
-  multiple,
-  disabled,
-  readOnly,
   required,
 }) {
   return (
     <div className={styles.form_control}>
       <label htmlFor={name}>{text}:</label>
-      <input
-        type={type}
+      <textarea
         name={name}
         id={name}
+        rows="4"
+        cols="50"
         placeholder={placeholder}
         onChange={handleOnChange}
         value={value}
-        multiple={multiple}
-        disabled={disabled}
-        readOnly={readOnly}
         required={required}
       />
     </div>
   );
 }
 
-export default Input;
+export default TextArea;
