@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import { BsSuitHeart, BsFillSuitHeartFill } from 'react-icons/bs';
@@ -25,6 +25,7 @@ function PetDetails() {
   const [pet, setPet] = useState({});
   const [mainImage, setMainImage] = useState([]);
   const [req, setReq] = useState(true);
+  const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState([]);
   const [token] = useState(localStorage.getItem('token') || '');
   const { setFlashMessage } = useFlashMessage();
@@ -32,11 +33,14 @@ function PetDetails() {
   const navigate = useNavigate();
   const { logout } = useContext(Context);
 
+  console.log(pet);
+
   const helpState = (tempMainImage, tempPet, tempFavorites) => {
     setReq(false);
-    setMainImage(tempMainImage);
     setFavorites(tempFavorites);
     setPet(tempPet);
+    setMainImage(tempMainImage);
+    setLoading(false);
   };
 
   useEffect(() => {
@@ -135,18 +139,21 @@ function PetDetails() {
     setMainImage([image, index]);
   }
 
-  function handleNextImage(signal) {
-    if (signal === '+' && mainImage[1] === pet.images.length - 1) {
-      return;
-    } else if (signal === '+') {
-      setMainImage([pet.images[mainImage[1] + 1], mainImage[1] + 1]);
-    }
-    if (signal === '-' && mainImage[1] === 0) {
-      return;
-    } else if (signal === '-') {
-      setMainImage([pet.images[mainImage[1] - 1], mainImage[1] - 1]);
-    }
-  }
+  const handleNextImage = useCallback(
+    signal => {
+      if (signal === '+' && mainImage[1] === pet.images.length - 1) {
+        return;
+      } else if (signal === '+') {
+        setMainImage([pet.images[mainImage[1] + 1], mainImage[1] + 1]);
+      }
+      if (signal === '-' && mainImage[1] === 0) {
+        return;
+      } else if (signal === '-') {
+        setMainImage([pet.images[mainImage[1] - 1], mainImage[1] - 1]);
+      }
+    },
+    [mainImage, pet.images],
+  );
 
   function disableButton(index, signal) {
     if (signal === '+' && index === pet.images.length - 1) {
@@ -166,15 +173,31 @@ function PetDetails() {
     }
   }
 
+  useEffect(() => {
+    const listener = event => {
+      if (event.key == 'ArrowLeft') handleNextImage('-');
+      if (event.key == 'ArrowRight') handleNextImage('+');
+    };
+    if (mainImage.length > 0) {
+      document.addEventListener('keydown', listener);
+    }
+    return () => document.removeEventListener('keydown', listener);
+  }, [mainImage, handleNextImage]);
+
   return (
     <section>
-      {pet.name && (
+      {!loading && (
         <>
           <h1>Olá, meu nome é {pet.name} e preciso de um novo lar!</h1>
           <div className={styles.pet_details_container}>
             <div className={styles.pet_images_container}>
               <div className={styles.pet_image}>
                 <img
+                  className={`${
+                    mainImage[1] % 2 === 0
+                      ? styles.pet_image_tag_0
+                      : styles.pet_image_tag_1
+                  }`}
                   src={`${process.env.REACT_APP_API}/images/pets/${mainImage[0]}`}
                   alt={pet.name}
                 />
