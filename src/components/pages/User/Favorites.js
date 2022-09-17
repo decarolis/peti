@@ -1,10 +1,18 @@
 import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
-import RoundedImage from '../../layout/RoundedImage';
+import { GiWeight, GiSandsOfTime } from 'react-icons/gi';
+import {
+  TbGenderMale,
+  TbGenderFemale,
+  TbGenderBigender,
+  TbInfoCircle,
+  TbMapPin,
+  TbTrashX,
+} from 'react-icons/tb';
 
 /* css */
-import styles from '../Pet/Dashboard.module.scss';
+import styles from '../Home.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -74,47 +82,117 @@ function Favorites() {
       });
   }
 
+  function sexSwitch(param) {
+    switch (param) {
+      case 'Macho':
+        return <TbGenderMale />;
+      case 'Fêmea':
+        return <TbGenderFemale />;
+      case 'Indefinido':
+        return <TbGenderBigender />;
+      default:
+        return '';
+    }
+  }
+
+  function handleButtonDetails(id) {
+    if (token) {
+      navigate(`/pet/${id}`);
+    } else {
+      setFlashMessage(
+        'Faça login ou registre-se para ver detalhes do pet',
+        'error',
+      );
+    }
+  }
+
   return (
-    <>
+    <section>
+      <h1>Meus Favoritos</h1>
       {!loading && (
-        <section>
-          <div className={styles.petslist_header}>
-            <h1>Meus favoritos</h1>
-          </div>
-          <div className={styles.petslist_container}>
-            {pets.length > 0 ? (
-              pets.map(pet => (
-                <div key={pet._id} className={styles.petlist_row}>
-                  <RoundedImage
-                    src={`${process.env.REACT_APP_API}/images/pets/${pet.images[0]}`}
-                    alt={pet.name}
-                    width="px75"
-                  />
-                  <span className="bold">{pet.name}</span>
-                  <div className={styles.actions}>
-                    {pet.active ? (
-                      <>
-                        <button
-                          onClick={() => {
-                            disfavorPet(pet._id);
-                          }}
-                        >
-                          Excluir
-                        </button>
-                      </>
-                    ) : (
-                      <p>Pet já adotado</p>
-                    )}
-                  </div>
+        <div className={styles.pet_container}>
+          {pets.length > 0 ? (
+            pets.map(pet => (
+              <div className={styles.pet_card} key={pet._id}>
+                <div
+                  style={{
+                    backgroundImage: `url(${process.env.REACT_APP_API}/images/pets/${pet.images[0]})`,
+                  }}
+                  className={styles.pet_card_image}
+                ></div>
+                <div className={styles.title}>
+                  <h3>{pet.name}</h3>
+                  <button className={styles.remove}>
+                    <TbTrashX onClick={() => disfavorPet(pet._id)} />
+                  </button>
                 </div>
-              ))
-            ) : (
-              <p>Ainda não há pets favoritos!</p>
-            )}
-          </div>
-        </section>
+                <p>
+                  <span>
+                    <TbInfoCircle />
+                  </span>
+                  {` ${pet.type}, ${pet.specificType}`}
+                </p>
+                <p>
+                  <span>{sexSwitch(pet.sex)}</span>
+                  {` ${pet.sex}`}
+                </p>
+                <p>
+                  <span>
+                    <GiSandsOfTime />
+                  </span>
+                  {pet.years === 0
+                    ? ''
+                    : pet.years === 1
+                    ? ` ${pet.years} ano`
+                    : ` ${pet.years} anos`}
+                  {pet.years > 0 && pet.months > 0 ? ' e ' : ''}
+                  {pet.months === 0
+                    ? ''
+                    : pet.months === 1
+                    ? ` ${pet.months} mês`
+                    : ` ${pet.months} meses`}
+                  {pet.months === 0 && pet.years === 0
+                    ? ' A idade não foi informada'
+                    : ''}
+                </p>
+                <p>
+                  <span>
+                    <GiWeight />
+                  </span>
+                  {pet.weightKg === 0
+                    ? ''
+                    : pet.weightKg === 1
+                    ? ` ${pet.weightKg} quilo`
+                    : ` ${pet.weightKg} quilos`}
+                  {pet.weightKg > 0 && pet.weightG > 0 ? ' e ' : ''}
+                  {pet.weightG === 0
+                    ? ''
+                    : pet.weightG === 1
+                    ? ` ${pet.weightG} grama`
+                    : ` ${pet.weightG} gramas`}
+                  {pet.weightKg === 0 && pet.weightG === 0
+                    ? ' O peso não foi informado'
+                    : ''}
+                </p>
+                <p>
+                  <span>
+                    <TbMapPin />
+                  </span>
+                  {` ${pet.state},  ${pet.city}`}
+                </p>
+                <button onClick={() => handleButtonDetails(pet._id)}>
+                  Mais detalhes
+                </button>
+              </div>
+            ))
+          ) : (
+            <p>
+              Não há pets cadastrados ou disponíveis para adoção no momento!
+            </p>
+          )}
+        </div>
       )}
-    </>
+    </section>
   );
 }
 

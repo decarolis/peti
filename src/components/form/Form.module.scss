@@ -1,64 +1,128 @@
-.form_container {
-  max-width: 300px;
-  margin: 0 auto;
-  background-color: #fff;
-  border-radius: 15px;
-}
-
-.form_container .p_label{
-  margin-bottom: 0.3em;
-  font-weight: bold;
-  font-size: 0.8em;
-}
-
-.form_container .p_error{
-  margin-top: 0.3em;
-  margin-bottom: 0.3em;
-  font-size: 0.8em;
-  color: #721c24;
-}
-
-.form_container .input_age{
-  max-width: 100%;
-  display: flex;
-  justify-content: space-between;
-}
-
-.form_container input[type='submit'] {
-  border-radius: 8px;
-  background-color: #25b456;
-  color: #fff;
-  border: none;
-  min-width: 100px;
-  min-height: 2.5rem;
-  width: 100%;
-  cursor: pointer;
-  font-size: 1.1em;
-  font-weight: bold;
-}
-
-.form_container input[type='submit']:hover {
-  background-color: #1c8a42;
-}
-
-.form_container .p_link {
-  margin-top: 1em;
-}
-
-.form_container .p_link a {
-  color: #16479d;
-  font-weight: bold;
-}
-
-/* form de pets */
-.preview_pet_images {
+.form_container_box {
   display: flex;
   justify-content: center;
-  margin-bottom: 1em;
+  margin: 0 16px;
+
+  .form_container {
+    margin: 0 16px;
+    margin-bottom: 16px;
+    width: 100%;
+    max-width: 400px;
+    background-color: var(--tertiary);
+    border-radius: 2px;
+    padding: 8px;
+
+    input, textarea {
+      background-color: var(--gray100);
+      border: none;
+      height: 3rem;
+      margin-bottom: 1.5rem;
+      padding-left: .9rem;
+      border-radius: 2px;
+      color: var(--graypeti);
+      outline-color: none;
+
+      &::placeholder {
+        color: #999;
+        opacity: 1;
+        font-size: 1rem;
+      }
+
+      &:focus {
+        outline: solid 2px var(--primary)
+      }
+    }
+
+    textarea {
+      resize: vertical;
+      height: 10rem;
+      padding: .9rem;
+    }
+
+    input[name=images] {
+      position:absolute;
+      top: -2000px;
+    }
+
+    input[type=submit], label[for=images] {
+      border-radius: 2px;
+      background-color: var(--primary);
+      transition: .5s;
+      border: none;
+      height: 4rem;
+      width: 100%;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      line-height: 4rem;
+      text-align: center;
+      margin: 0;
+
+      &:hover {
+        background-color: var(--graypeti);
+        color: var(--white);
+      }
+    }
+
+    label[for=images] {
+      border-radius: 2px 2px 0 0;
+    }
+
+    input[disabled] {
+      background-color: #eeeeee;
+    }
+
+    label, .p_label {
+      margin-bottom: 0.4rem;
+      font-weight: bold;
+    }
+
+    .p_error{
+      margin: 0.3 0;
+      color: #721c24;
+    }
+
+    .input_age_weight_container {
+      max-width: 100%;
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 1.5rem;
+    }
+
+    .p_link {
+      margin-top: 1rem;
+    }
+
+    .p_link a {
+      color: #16479d;
+      font-weight: bold;
+    }
+
+    .map {
+      position: relative;
+      width: 100%;
+      height: 400px;
+      margin-bottom: 1.5rem;
+    }
+
+    /* form de pets */
+    .preview_pet_images {
+      min-height: 100px;
+      width: 100%;
+      background-color: var(--secondary);
+      display: flex;
+      flex-wrap: wrap;
+      margin-bottom: 1.5rem;
+      border-radius: 0 0 2px 2px;
+    }
+
+    .preview_pet_images img {
+      width: 75px;
+      height: 75px;
+      margin: 10px;
+      object-fit: cover;
+    }
+  }
 }
 
-.preview_pet_images img {
-  width: 100px;
-  height: 100px;
-  margin-left: 1em;
-}
+

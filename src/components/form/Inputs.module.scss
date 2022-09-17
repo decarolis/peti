@@ -1,0 +1,50 @@
+.form_input {
+  display: flex;
+  flex-direction: column;
+}
+
+.form_textarea {
+  display: flex;
+  flex-direction: column;
+}
+
+.form_select {
+  display: flex;
+  flex-direction: column;
+
+  select {
+    height: 3rem;
+    background-color: var(--gray100);
+    padding-left: .8rem;
+    border: none;
+    border-radius: 2px;
+    color: #999;
+    margin-bottom: 1.5rem;
+
+    &:focus {
+      outline: solid 2px var(--primary)
+    }
+  }
+
+  .select_color {
+    color: var(--graypeti);
+  }
+}
+
+.box_age_weight {
+  height: 3rem;
+  display: flex;
+  width: 49%;
+  background-color: var(--gray100);
+  border-radius: 2px;
+
+  .fixed_text {
+    padding: 0.9rem;
+    width: 100%;
+  }
+
+  input {
+    outline: none;
+    width: 100%;
+  }
+}

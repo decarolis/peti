@@ -16,29 +16,32 @@
   --graypeti: #272833;
   --gray900: #121214;
   --primary: #91AE91;
-  --secondary: #B5948B;
+  --secondary: #fff0ef;
+  --secondary-p: #7a645e;
   --tertiary: #F5DEDC;
 }
 
-@media (max-width: 1080px) {
+@media (min-width: 768px) {
   html {
     font-size: 93.75%;
   }
 }
 
-@media (max-width: 720px) {
+@media (min-width: 1080px) {
   html {
-    font-size: 87.5%;
+    font-size: 100%;
   }
 }
 
-body {
-  background: var(--gray100);
-  color: var(--graypeti);
+html {
+  font-size: 87.5%;
 }
 
-button {
-  cursor: pointer;
+body {
+  display: flex;
+  flex-direction: column;
+  background: var(--gray100);
+  color: var(--graypeti);
 }
 
 a {
@@ -47,23 +50,52 @@ a {
 }
 
 h1 {
+  display: flex;
+  justify-content: center;
+  align-items: center;
   text-align: center;
   background-color: #91AE91;
-  margin: .3rem 1rem;
-  padding: 0.2rem 1rem;
+  margin: 6px 16px;
+  height: 64px;
   color: var(--white);
   font-size: 1.6rem;
 }
 
-.bold {
+h2 {
+  font-size: 1.9rem;
+  display: inline-block;
+}
+
+h3 {
+  font-size: 1.6rem;
+  display: inline-block;
+  margin-bottom: .5rem;
+}
+
+button {
+  border-radius: 2px;
+  background-color: var(--primary);
+  transition: .5s;
+  border: none;
+  padding: 15px;
+  width: 100%;
+  font-size: 1.2rem;
   font-weight: bold;
-  color: var(--secondary);
+  cursor: pointer;
+
+  &:hover {
+    background-color: var(--graypeti);
+    color: var(--white);
+  }
 }
 
 .leaflet-container {
-  width: 100%;
-  height: 300px;
-  margin-bottom: 1rem;
+  position: absolute;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  left: 0;
   border: 1px solid var(--gray300);
-  border-radius: 5px;
+  border-radius: 2px;
+  z-index: 1;
 }

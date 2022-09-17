@@ -1,6 +1,8 @@
 import { useState, useEffect, useContext, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
+import { IoMdArrowRoundBack } from 'react-icons/io';
+import { BiSubdirectoryRight } from 'react-icons/bi';
 import { BsSuitHeart, BsFillSuitHeartFill } from 'react-icons/bs';
 import { GiWeight, GiSandsOfTime } from 'react-icons/gi';
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
@@ -11,6 +13,7 @@ import {
   TbInfoCircle,
   TbMapPin,
 } from 'react-icons/tb';
+import Map from '../../layout/Map';
 
 /* css */
 import styles from './PetDetails.module.scss';
@@ -32,8 +35,6 @@ function PetDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { logout } = useContext(Context);
-
-  console.log(pet);
 
   const helpState = (tempMainImage, tempPet, tempFavorites) => {
     setReq(false);
@@ -186,6 +187,10 @@ function PetDetails() {
 
   return (
     <section>
+      <IoMdArrowRoundBack
+        onClick={() => navigate(-1)}
+        className={styles.svg_add}
+      />
       {!loading && (
         <>
           <h1>Olá, meu nome é {pet.name} e preciso de um novo lar!</h1>
@@ -231,58 +236,101 @@ function PetDetails() {
               </div>
             </div>
             <div className={styles.pet_details}>
-              <h3>{pet.name}</h3>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                {favorites.includes(pet._id) ? (
-                  <BsFillSuitHeartFill
-                    onClick={() => handleFavorites(pet._id, 'remove')}
-                    className={styles.red_heart}
-                  />
-                ) : (
-                  <BsSuitHeart
-                    onClick={() => handleFavorites(pet._id, 'add')}
-                    className={styles.heart}
-                  />
-                )}
+              <div className={styles.pet_details_info}>
+                <div
+                  style={{ display: 'flex', justifyContent: 'space-between' }}
+                >
+                  <h2>{pet.name}</h2>
+                  {favorites.includes(pet._id) ? (
+                    <BsFillSuitHeartFill
+                      onClick={() => handleFavorites(pet._id, 'remove')}
+                      className={styles.red_heart}
+                    />
+                  ) : (
+                    <BsSuitHeart
+                      onClick={() => handleFavorites(pet._id, 'add')}
+                      className={styles.heart}
+                    />
+                  )}
+                </div>
+                <div className={styles.pet_details_bio}>
+                  <p>{pet.bio}</p>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <span>
+                    <TbInfoCircle />
+                  </span>
+                  <p>{` ${pet.type}, ${pet.specificType}`}</p>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <p>
+                    <span>{sexSwitch(pet.sex)}</span>
+                    {` ${pet.sex}`}
+                  </p>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <span>
+                    <GiSandsOfTime />
+                  </span>
+                  <p>
+                    {pet.years === 0
+                      ? ''
+                      : pet.years === 1
+                      ? ` ${pet.years} ano`
+                      : ` ${pet.years} anos`}
+                    {pet.years > 0 && pet.months > 0 ? ' e ' : ''}
+                    {pet.months === 0
+                      ? ''
+                      : pet.months === 1
+                      ? ` ${pet.months} mês`
+                      : ` ${pet.months} meses`}
+                    {pet.months === 0 && pet.years === 0
+                      ? ' A idade não foi informada'
+                      : ''}
+                  </p>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <span>
+                    <GiWeight />
+                  </span>
+                  <p>
+                    {pet.weightKg === 0
+                      ? ''
+                      : pet.weightKg === 1
+                      ? ` ${pet.weightKg} quilo`
+                      : ` ${pet.weightKg} quilos`}
+                    {pet.weightKg > 0 && pet.weightG > 0 ? ' e ' : ''}
+                    {pet.weightG === 0
+                      ? ''
+                      : pet.weightG === 1
+                      ? ` ${pet.weightG} grama`
+                      : ` ${pet.weightG} gramas`}
+                    {pet.weightKg === 0 && pet.weightG === 0
+                      ? ' O peso não foi informado'
+                      : ''}
+                  </p>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <span>
+                    <TbMapPin />
+                  </span>
+                  <p>{` ${pet.state},  ${pet.city}`}</p>
+                </div>
+                <div style={{ display: 'flex' }}>
+                  <span>
+                    <BiSubdirectoryRight />
+                  </span>
+                  <p>{` ${pet.district} `}</p>
+                </div>
               </div>
-              <p>
-                <span>
-                  <TbInfoCircle />
-                </span>
-                {` ${pet.type}, ${pet.specificType}`}
-              </p>
-              <p>
-                <span>{sexSwitch(pet.sex)}</span>
-                {` ${pet.sex}`}
-              </p>
-              <p>
-                <span>
-                  <GiSandsOfTime />
-                </span>
-                {pet.years === 0
-                  ? ''
-                  : pet.years === 1
-                  ? ` ${pet.years} ano`
-                  : ` ${pet.years} anos`}
-                {pet.years > 0 && pet.months > 0 ? ' e ' : ''}
-                {pet.months === 0
-                  ? ''
-                  : pet.months === 1
-                  ? ` ${pet.months} mês`
-                  : ` ${pet.months} meses`}
-              </p>
-              <p>
-                <span>
-                  <GiWeight />
-                </span>
-                {` ${pet.weight} `}kg
-              </p>
-              <p>
-                <span>
-                  <TbMapPin />
-                </span>
-                {` ${pet.state},  ${pet.city}`}
-              </p>
+              <div className={styles.pet_details_map}>
+                <Map position={pet.latLong} zoom={13} />
+              </div>
+              <div className={styles.pet_details_contact}>
+                <p>Para saber mais detalhes entre em contato com:</p>
+                <h4>{pet.user.name}</h4>
+                <h4>{pet.user.phone}</h4>
+              </div>
             </div>
           </div>
         </>

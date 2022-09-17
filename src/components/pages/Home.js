@@ -161,9 +161,7 @@ function Home() {
                   }}
                   className={styles.pet_card_image}
                 ></div>
-                <div
-                  style={{ display: 'flex', justifyContent: 'space-between' }}
-                >
+                <div className={styles.title}>
                   <h3>{pet.name}</h3>
                   {favorites.includes(pet._id) ? (
                     <BsFillSuitHeartFill
@@ -202,12 +200,28 @@ function Home() {
                     : pet.months === 1
                     ? ` ${pet.months} mês`
                     : ` ${pet.months} meses`}
+                  {pet.months === 0 && pet.years === 0
+                    ? ' A idade não foi informada'
+                    : ''}
                 </p>
                 <p>
                   <span>
                     <GiWeight />
                   </span>
-                  {` ${pet.weight} `}kg
+                  {pet.weightKg === 0
+                    ? ''
+                    : pet.weightKg === 1
+                    ? ` ${pet.weightKg} quilo`
+                    : ` ${pet.weightKg} quilos`}
+                  {pet.weightKg > 0 && pet.weightG > 0 ? ' e ' : ''}
+                  {pet.weightG === 0
+                    ? ''
+                    : pet.weightG === 1
+                    ? ` ${pet.weightG} grama`
+                    : ` ${pet.weightG} gramas`}
+                  {pet.weightKg === 0 && pet.weightG === 0
+                    ? ' O peso não foi informado'
+                    : ''}
                 </p>
                 <p>
                   <span>

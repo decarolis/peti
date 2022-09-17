@@ -1,15 +1,35 @@
+section {
+  position: relative;
+
+  .svg_add {
+      position: absolute;
+      top: 10px;
+      right: 30px;
+      font-size: 3rem;
+      color: var(--white);
+      transition: .5s;
+      cursor: pointer;
+
+      &:hover {
+        color: #7df850;
+      }
+  }
+}
+
 .pet_details_container {
-  margin: 16px;
   display: flex;
+  margin: 16px;
+  flex-wrap: wrap;
   justify-content: space-between;
 
   .pet_images_container {
     background-color: var(--primary);
-    padding: 16px;
+    border-radius: 2px;
+    margin-bottom: 16px;
+    padding: .5rem;
+    width: 100%;
+    height: 700px;
     position: relative;
-    width: 690px;
-    height: 690px;
-    border-radius: 5px;
     overflow: hidden;
 
     .arrow {
@@ -21,7 +41,7 @@
       background-color: var(--primary);
       position: absolute;
       font-size: 2.5rem;
-      top: 300px;
+      top: 330px;
       cursor: pointer;
     }
 
@@ -66,7 +86,7 @@
 
     .pet_images {
       position: absolute;
-      bottom: 15px;
+      bottom: 20px;
       display: flex;
       width: calc(100% - 2rem);
       height: 50px;
@@ -90,17 +110,92 @@
       .image_list {
         width: 40px;
         height: 40px;
-        border: 3px solid var(--graypeti);
+        border: 4px solid var(--graypeti);
       }
     }
-
-
   }
 
   .pet_details {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
     background-color: var(--tertiary);
+    border-radius: 2px;
+    margin-bottom: 16px;
+    padding: .5rem;
     width: 100%;
-    max-width: 340px;
+
+    .pet_details_info {
+      width: 100%;
+
+      .heart {
+        font-size: 2rem;
+        cursor: pointer;
+      }
+
+      .red_heart {
+        font-size: 2rem;
+        cursor: pointer;
+        color: #d05555;
+      }
+
+      .pet_details_bio {
+        margin: .5rem 0;
+        line-height: 1.3rem;
+        width: 100%;
+        border-radius: 2px;
+        padding: 10px 5px;
+        background-color: var(--secondary);
+
+        p {
+          color: var(--graypeti);
+        }
+      }
+
+      p, span {
+        margin: .3rem 0;
+        margin-right: .4rem;
+      }
+
+      p {
+        color: var(--secondary-p);
+      }
+
+      span {
+        color: var(--graypeti);
+        vertical-align: middle;
+      }
+    }
+
+    .pet_details_map {
+      position: relative;
+      width: 100%;
+      min-height: 300px;
+    }
+
+    .pet_details_contact {
+      margin-top: .5rem;
+      width: 100%;
+      border-radius: 2px;
+      padding: 20px;
+      background-color: var(--primary);
+
+      p, h4 {
+        color: var(--white);
+        text-align: center;
+        margin-bottom: .4rem;
+      }
+
+      p {
+        margin-top: .4rem;
+      }
+
+
+      h4 {
+        font-size: 1.6rem;
+      }
+
+    }
   }
 }
 
@@ -126,6 +221,39 @@
     transform: scale(1);
   }
 }
+
+@media (min-width: 710px) {
+  .pet_details_container {
+    .pet_details {
+      .pet_details_info {
+        width: 49%;
+      }
+      .pet_details_map {
+        width: 50%;
+      }
+    }
+  }
+}
+
+@media (min-width: 1080px) {
+  .pet_details_container {
+    .pet_images_container {
+      width: 64.5%;
+    }
+
+    .pet_details {
+      width: 34%;
+
+      .pet_details_info {
+        width: 100%;
+      }
+      .pet_details_map {
+        width: 100%;
+      }
+    }
+  }
+}
+
 
 
 

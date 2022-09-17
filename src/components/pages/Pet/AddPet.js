@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import PetForm from '../../form/PetForm';
+import { IoMdArrowRoundBack } from 'react-icons/io';
 
 /* css */
 import styles from './AddPet.module.scss';
@@ -16,6 +17,19 @@ function AddPet() {
 
   async function registerPet(pet) {
     let msgType = 'success';
+
+    if (!pet.years) {
+      pet = { ...pet, years: 0 };
+    }
+    if (!pet.months) {
+      pet = { ...pet, months: 0 };
+    }
+    if (!pet.weightKg) {
+      pet = { ...pet, weightKg: 0 };
+    }
+    if (!pet.weightG) {
+      pet = { ...pet, weightG: 0 };
+    }
 
     const formData = new FormData();
 
@@ -58,9 +72,12 @@ function AddPet() {
 
   return (
     <section>
+      <IoMdArrowRoundBack
+        onClick={() => navigate(-1)}
+        className={styles.svg_add}
+      />
       <div className={styles.addpet_header}>
         <h1>Cadastre um Pet</h1>
-        <p>Depois ele ficará disponível para adoção</p>
       </div>
       <PetForm handleSubmit={registerPet} btnText="Cadastrar" />
     </section>

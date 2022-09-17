@@ -1,17 +1,29 @@
-import styles from './Select.module.scss';
+import styles from './Inputs.module.scss';
 
-function Select({ text, name, options, handleOnChange, value, required }) {
+function Select({
+  text,
+  name,
+  options,
+  handleOnChange,
+  value,
+  required,
+  classname,
+}) {
+  const selectClass = classname => (classname ? styles.select_color : {});
   return (
-    <div className={styles.form_control}>
-      <label htmlFor={name}>{text}:</label>
+    <div className={styles.form_select}>
+      <label htmlFor={name}>{text}</label>
       <select
+        className={`${selectClass(classname)}`}
         name={name}
         id={name}
         onChange={handleOnChange}
         defaultValue={value}
         required={required}
       >
-        <option value="">Selecione uma opção</option>
+        <option disabled value="">
+          Selecione uma opção
+        </option>
         {options.map(option => (
           <option value={option} key={option}>
             {option}

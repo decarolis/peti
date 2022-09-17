@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import PetForm from '../../form/PetForm';
+import { IoMdArrowRoundBack } from 'react-icons/io';
 
 /* css */
 import styles from './AddPet.module.scss';
@@ -116,6 +117,10 @@ function EditPet() {
 
   return (
     <section>
+      <IoMdArrowRoundBack
+        onClick={() => navigate(-1)}
+        className={styles.svg_add}
+      />
       <div className={styles.addpet_header}>
         <h1>Editando o Pet: {pet.name}</h1>
         <p>Depois da edição os dados serão atualizados no sistema</p>

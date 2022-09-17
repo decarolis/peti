@@ -30,7 +30,9 @@ function Message() {
 
   return (
     visibility && (
-      <div className={`${styles.message} ${styles[type]} close`}>{message}</div>
+      <div className={styles.message}>
+        <div className={` ${styles[type]} close`}>{message}</div>
+      </div>
     )
   );
 }

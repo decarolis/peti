@@ -1,14 +1,34 @@
+section {
+  position: relative;
+
+  .svg_add {
+      position: absolute;
+      top: 10px;
+      right: 30px;
+      font-size: 3rem;
+      color: var(--white);
+      transition: .5s;
+      cursor: pointer;
+
+      &:hover {
+        color: #7df850;
+      }
+  }
+}
+
 .pet_container {
+  border: 1px solid red;
   display: flex;
-  justify-content: flex-start;
+  margin: 8px;
+  padding: 8px;
   flex-wrap: wrap;
+  justify-content: space-between;
 
   .pet_card {
     background-color: var(--tertiary);
     border-radius: 2px;
     padding: .5rem;
-    width: 328px;
-    margin: 16px;
+    width: 100%;
     box-shadow: 1px 2px 5px rgb(0 0 0 / 0.3);
 
     .pet_card_image {
@@ -20,14 +40,49 @@
       margin-bottom: .5rem;
     }
 
-    h3 {
-      font-size: 1.6rem;
-      display: inline-block;
-      margin-bottom: .5rem;
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+
+      .remove {
+        align-self: flex-start;
+        width: 40px;
+        line-height: 1rem;
+        padding: 3px;
+        font-size: 2rem;
+        background-color: #e38d8d;
+        color: var(--graypeti);
+
+        &:hover {
+          background-color: var(--graypeti);
+          color: #e38d8d;
+        }
+      }
+    }
+
+    .heart {
+      font-size: 2rem;
+      cursor: pointer;
+    }
+
+    .red_heart {
+      font-size: 2rem;
+      cursor: pointer;
+      color: #d05555;
+    }
+
+    .div_buttons {
+      display: flex;
+      justify-content: space-between;
+
+      button {
+        width: 49%;
+      }
     }
 
     p {
-      color: #7a645e;
+      color: var(--secondary-p);
       margin-bottom: .5rem;
     }
 
@@ -35,37 +90,29 @@
       color: var(--graypeti);
       vertical-align: middle;
     }
-
-    button {
-      border-radius: 2px;
-      color: var(--white);
-      background-color: var(--primary);
-      transition: .5s;
-      border: none;
-      padding: 15px;
-      width: 100%;
-      font-size: 1.1rem;
-      font-weight: bold;
-
-      &:hover {
-        background-color: var(--graypeti);
-      }
-    }
-
-    .heart {
-      font-size: 30px;
-      cursor: pointer;
-    }
-
-    .red_heart {
-      font-size: 30px;
-      cursor: pointer;
-      color: #d05555;
-    }
   }
 }
 
 
+
+@media (min-width: 710px) {
+  .pet_container {
+    .pet_card {
+      width: 49% ;
+    }
+  }
+}
+
+@media (min-width: 1080px) {
+  .pet_container {
+    padding: 0;
+    justify-content: flex-start;
+    .pet_card {
+      margin: 8px 8px;
+      width: 337px;
+    }
+  }
+}
 
 
 

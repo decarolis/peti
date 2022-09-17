@@ -1,4 +1,4 @@
-import styles from './TextArea.module.scss';
+import styles from './Inputs.module.scss';
 
 function TextArea({
   text,
@@ -9,8 +9,8 @@ function TextArea({
   required,
 }) {
   return (
-    <div className={styles.form_control}>
-      <label htmlFor={name}>{text}:</label>
+    <div className={styles.form_textarea}>
+      <label htmlFor={name}>{text}</label>
       <textarea
         name={name}
         id={name}

@@ -1,4 +1,4 @@
-import styles from './InputAge.module.scss';
+import styles from './Inputs.module.scss';
 
 function InputAge({
   text,
@@ -9,9 +9,10 @@ function InputAge({
   max,
   placeholder,
   required,
+  step,
 }) {
   return (
-    <div className={styles.form_control}>
+    <div className={styles.box_age_weight}>
       <div className={styles.fixed_text}>{text}</div>
       <input
         type="number"
@@ -23,6 +24,7 @@ function InputAge({
         min={min}
         max={max}
         required={required}
+        step={step}
       />
     </div>
   );

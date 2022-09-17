@@ -1,4 +1,4 @@
-import styles from './Input.module.scss';
+import styles from './Inputs.module.scss';
 
 function Input({
   type,
@@ -11,10 +11,11 @@ function Input({
   disabled,
   readOnly,
   required,
+  accept,
 }) {
   return (
-    <div className={styles.form_control}>
-      <label htmlFor={name}>{text}:</label>
+    <div className={styles.form_input}>
+      <label htmlFor={name}>{text}</label>
       <input
         type={type}
         name={name}
@@ -26,6 +27,7 @@ function Input({
         disabled={disabled}
         readOnly={readOnly}
         required={required}
+        accept={accept}
       />
     </div>
   );
