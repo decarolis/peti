@@ -22,28 +22,30 @@ function Login() {
   };
 
   return (
-    <section className={styles.form_container}>
+    <section>
       <h1>Login</h1>
-      <form onSubmit={handleSubmit}>
-        <Input
-          text="E-mail"
-          type="email"
-          name="email"
-          placeholder="Digite o e-mail"
-          handleOnChange={handleChange}
-        />
-        <Input
-          text="Senha"
-          type="password"
-          name="password"
-          placeholder="Digite a senha"
-          handleOnChange={handleChange}
-        />
-        <input type="submit" value="Entrar" />
-      </form>
-      <p className={styles.p_link}>
-        Não tem conta? <Link to="/register">Clique aqui.</Link>
-      </p>
+      <div className={styles.form_container_box}>
+        <form onSubmit={handleSubmit} className={styles.form_container}>
+          <Input
+            text="E-mail"
+            type="email"
+            name="email"
+            placeholder="Digite seu e-mail"
+            handleOnChange={handleChange}
+          />
+          <Input
+            text="Senha"
+            type="password"
+            name="password"
+            placeholder="Digite sua senha"
+            handleOnChange={handleChange}
+          />
+          <input type="submit" value="Entrar" />
+          <p className={styles.p_link}>
+            Não tem conta? <Link to="/register">Clique aqui.</Link>
+          </p>
+        </form>
+      </div>
     </section>
   );
 }

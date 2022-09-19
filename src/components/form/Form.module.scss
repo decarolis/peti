@@ -1,11 +1,12 @@
 .form_container_box {
   display: flex;
   justify-content: center;
-  margin: 0 16px;
+  margin: 16px;
 
   .form_container {
+    display: flex;
+    flex-direction: column;
     margin: 0 16px;
-    margin-bottom: 16px;
     width: 100%;
     max-width: 400px;
     background-color: var(--tertiary);
@@ -39,37 +40,41 @@
       padding: .9rem;
     }
 
-    input[name=images] {
+    input[name=images], input[name=image] {
       position:absolute;
       top: -2000px;
     }
 
-    input[type=submit], label[for=images] {
+    input[type=submit], label[for=images], label[for=image] {
       border-radius: 2px;
-      background-color: var(--primary);
+      background-color: var(--graypeti);
+      color: var(--gray100);
       transition: .5s;
-      border: none;
+      border: solid 2px var(--graypeti);
       height: 4rem;
+      line-height: 4rem;
       width: 100%;
       font-size: 1.2rem;
       font-weight: bold;
       cursor: pointer;
-      line-height: 4rem;
       text-align: center;
       margin: 0;
+      outline: none;
 
       &:hover {
-        background-color: var(--graypeti);
-        color: var(--white);
+        background-color: var(--gray100);
+        border: solid 2px var(--graypeti);
+        color: var(--graypeti);
       }
     }
 
-    label[for=images] {
+    label[for=images], label[for=image] {
       border-radius: 2px 2px 0 0;
     }
 
     input[disabled] {
       background-color: #eeeeee;
+      color: #999;
     }
 
     label, .p_label {
@@ -90,12 +95,31 @@
     }
 
     .p_link {
+      text-align: center;
       margin-top: 1rem;
     }
 
     .p_link a {
       color: #16479d;
       font-weight: bold;
+    }
+
+    .remove {
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      width: 40px;
+      line-height: 1rem;
+      padding: 3px;
+      font-size: 2rem;
+      background-color: #e38d8d;
+      box-shadow: 1px 2px 5px rgb(0 0 0 / 0.3);
+      color: var(--graypeti);
+
+      &:hover {
+        background-color: var(--graypeti);
+        color: #e38d8d;
+      }
     }
 
     .map {
@@ -105,22 +129,44 @@
       margin-bottom: 1.5rem;
     }
 
-    /* form de pets */
-    .preview_pet_images {
+    .preview_pet_images, .preview_user_image {
+      position: relative;
       min-height: 100px;
       width: 100%;
       background-color: var(--secondary);
       display: flex;
       flex-wrap: wrap;
+      justify-content: center;
       margin-bottom: 1.5rem;
       border-radius: 0 0 2px 2px;
+      padding: 4px;
+      overflow: hidden;
+
+      .prerequisite {
+        margin: 0.9rem;
+        color: #999;
+
+        p {
+          line-height: 1.8rem;
+        }
+      }
+
+      img {
+        width: 86px;
+        height: 86px;
+        margin: 4px;
+        object-fit: cover;
+      }
     }
 
-    .preview_pet_images img {
-      width: 75px;
-      height: 75px;
-      margin: 10px;
-      object-fit: cover;
+    .preview_user_image {
+      img {
+        width: 100%;
+        height: unset;
+        aspect-ratio: 1 / 1;
+        margin: 4px;
+        object-fit: cover;
+      }
     }
   }
 }

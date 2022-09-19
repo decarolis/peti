@@ -7,6 +7,7 @@ function TextArea({
   handleOnChange,
   value,
   required,
+  maxlength,
 }) {
   return (
     <div className={styles.form_textarea}>
@@ -20,6 +21,7 @@ function TextArea({
         onChange={handleOnChange}
         value={value}
         required={required}
+        maxLength={maxlength}
       />
     </div>
   );

@@ -17,7 +17,6 @@ section {
 }
 
 .pet_container {
-  border: 1px solid red;
   display: flex;
   margin: 8px;
   padding: 8px;
@@ -25,25 +24,47 @@ section {
   justify-content: space-between;
 
   .pet_card {
+    display: flex;
+    flex-direction: column;
     background-color: var(--tertiary);
     border-radius: 2px;
     padding: .5rem;
     width: 100%;
     box-shadow: 1px 2px 5px rgb(0 0 0 / 0.3);
+    margin-bottom: 16px;
 
-    .pet_card_image {
-      border-radius: 2px;
-      background-size: cover;
-      background-position: center;
-      height: 250px;
-      width: 100%;
-      margin-bottom: .5rem;
+    .h3_confirmation {
+      animation: swing .5s;
+      word-break: unset;
+      word-break: unset;
+      hyphens: none;
+      margin-top: auto;
+    }
+
+    .div_buttons_confirmation {
+      animation: swing .5s;
+      button {
+        background-color: var(--graypeti);
+        border: solid 2px var(--graypeti);
+        color: var(--gray100);
+
+        &:hover {
+          background-color: var(--gray100);
+          border: solid 2px var(--graypeti);
+          color: var(--graypeti);
+        }
+      }
     }
 
     .title {
+      animation: swing .5s;
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-start;
+
+      & > * {
+        min-width: 40px;
+      }
 
       .remove {
         align-self: flex-start;
@@ -52,6 +73,7 @@ section {
         padding: 3px;
         font-size: 2rem;
         background-color: #e38d8d;
+        box-shadow: 1px 2px 5px rgb(0 0 0 / 0.3);
         color: var(--graypeti);
 
         &:hover {
@@ -63,7 +85,12 @@ section {
 
     .heart {
       font-size: 2rem;
+      transition: .5s;
       cursor: pointer;
+
+      &:hover {
+        color: #d05555;
+      }
     }
 
     .red_heart {
@@ -73,6 +100,8 @@ section {
     }
 
     .div_buttons {
+      animation: swing .5s;
+      margin-top: auto;
       display: flex;
       justify-content: space-between;
 
@@ -81,7 +110,12 @@ section {
       }
     }
 
+    .button_home {
+      margin-top: auto;
+    }
+
     p {
+      animation: swing .5s;
       color: var(--secondary-p);
       margin-bottom: .5rem;
     }
@@ -93,7 +127,16 @@ section {
   }
 }
 
-
+@keyframes swing {
+  0% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 
 @media (min-width: 710px) {
   .pet_container {

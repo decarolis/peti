@@ -1,11 +1,10 @@
-import { useState, useEffect, useContext, useCallback } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
-import { IoMdArrowRoundBack } from 'react-icons/io';
+import ModalImages from '../../layout/ModalImages';
 import { BiSubdirectoryRight } from 'react-icons/bi';
 import { BsSuitHeart, BsFillSuitHeartFill } from 'react-icons/bs';
 import { GiWeight, GiSandsOfTime } from 'react-icons/gi';
-import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 import {
   TbGenderMale,
   TbGenderFemale,
@@ -26,7 +25,6 @@ import { Context } from '../../../context/UserContext';
 
 function PetDetails() {
   const [pet, setPet] = useState({});
-  const [mainImage, setMainImage] = useState([]);
   const [req, setReq] = useState(true);
   const [loading, setLoading] = useState(true);
   const [favorites, setFavorites] = useState([]);
@@ -36,16 +34,15 @@ function PetDetails() {
   const navigate = useNavigate();
   const { logout } = useContext(Context);
 
-  const helpState = (tempMainImage, tempPet, tempFavorites) => {
+  const helpState = (tempPet, tempFavorites) => {
     setReq(false);
     setFavorites(tempFavorites);
     setPet(tempPet);
-    setMainImage(tempMainImage);
     setLoading(false);
   };
 
   useEffect(() => {
-    let tempMainImage, tempPet, tempFavorites;
+    let tempPet, tempFavorites;
     let mounted = true;
     if (token && req) {
       api
@@ -66,9 +63,8 @@ function PetDetails() {
             })
             .then(response => {
               tempPet = response.data.pet;
-              tempMainImage = [response.data.pet.images[0], 0];
               if (mounted) {
-                helpState(tempMainImage, tempPet, tempFavorites);
+                helpState(tempPet, tempFavorites);
               }
             });
         })
@@ -136,105 +132,17 @@ function PetDetails() {
     }
   }
 
-  function handleMainImage(image, index) {
-    setMainImage([image, index]);
-  }
-
-  const handleNextImage = useCallback(
-    signal => {
-      if (signal === '+' && mainImage[1] === pet.images.length - 1) {
-        return;
-      } else if (signal === '+') {
-        setMainImage([pet.images[mainImage[1] + 1], mainImage[1] + 1]);
-      }
-      if (signal === '-' && mainImage[1] === 0) {
-        return;
-      } else if (signal === '-') {
-        setMainImage([pet.images[mainImage[1] - 1], mainImage[1] - 1]);
-      }
-    },
-    [mainImage, pet.images],
-  );
-
-  function disableButton(index, signal) {
-    if (signal === '+' && index === pet.images.length - 1) {
-      return styles.disable_button;
-    } else if (signal === '-' && index === 0) {
-      return styles.disable_button;
-    } else {
-      return '';
-    }
-  }
-
-  function handleImageList(img, index) {
-    if (img === mainImage[0] && index === mainImage[1]) {
-      return styles.image_list;
-    } else {
-      return '';
-    }
-  }
-
-  useEffect(() => {
-    const listener = event => {
-      if (event.key == 'ArrowLeft') handleNextImage('-');
-      if (event.key == 'ArrowRight') handleNextImage('+');
-    };
-    if (mainImage.length > 0) {
-      document.addEventListener('keydown', listener);
-    }
-    return () => document.removeEventListener('keydown', listener);
-  }, [mainImage, handleNextImage]);
-
   return (
     <section>
-      <IoMdArrowRoundBack
-        onClick={() => navigate(-1)}
-        className={styles.svg_add}
-      />
       {!loading && (
         <>
           <h1>Olá, meu nome é {pet.name} e preciso de um novo lar!</h1>
           <div className={styles.pet_details_container}>
-            <div className={styles.pet_images_container}>
-              <div className={styles.pet_image}>
-                <img
-                  className={`${
-                    mainImage[1] % 2 === 0
-                      ? styles.pet_image_tag_0
-                      : styles.pet_image_tag_1
-                  }`}
-                  src={`${process.env.REACT_APP_API}/images/pets/${mainImage[0]}`}
-                  alt={pet.name}
-                />
-              </div>
-              <div className={styles.pet_images}>
-                {pet.images.map((image, index) => (
-                  <img
-                    onClick={() => handleMainImage(image, index)}
-                    key={index}
-                    src={`${process.env.REACT_APP_API}/images/pets/${image}`}
-                    alt={pet.name}
-                    className={handleImageList(image, index)}
-                  />
-                ))}
-              </div>
-              <div
-                onClick={() => handleNextImage('-')}
-                className={`${styles.arrow_left} ${
-                  styles.arrow
-                } ${disableButton(mainImage[1], '-')}`}
-              >
-                <FaArrowLeft />
-              </div>
-              <div
-                onClick={() => handleNextImage('+')}
-                className={`${styles.arrow_right} ${
-                  styles.arrow
-                } ${disableButton(mainImage[1], '+')}`}
-              >
-                <FaArrowRight />
-              </div>
-            </div>
+            <ModalImages
+              classname={'details'}
+              image={[pet.images[0], 0]}
+              pet={pet}
+            />
             <div className={styles.pet_details}>
               <div className={styles.pet_details_info}>
                 <div

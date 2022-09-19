@@ -26,8 +26,8 @@ function App() {
   return (
     <BrowserRouter>
       <UserProvider>
-        <Message />
         <Navbar />
+        <Message />
         <Container>
           <Routes>
             <Route path="/login" element={<Login />} />

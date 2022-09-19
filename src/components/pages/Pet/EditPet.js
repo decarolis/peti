@@ -2,10 +2,6 @@ import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import PetForm from '../../form/PetForm';
-import { IoMdArrowRoundBack } from 'react-icons/io';
-
-/* css */
-import styles from './AddPet.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -30,11 +26,9 @@ function EditPet() {
   };
 
   useEffect(() => {
-    console.log('oi effect');
     let tempPet;
     let mounted = true;
     if (token && loading) {
-      console.log('oi effect REQ');
       api
         .get(`/pets/${id}`, {
           headers: {
@@ -42,7 +36,6 @@ function EditPet() {
           },
         })
         .then(response => {
-          console.log(response.data);
           if (response.data.isOwner) {
             if (mounted) {
               tempPet = response.data.pet;
@@ -117,20 +110,14 @@ function EditPet() {
 
   return (
     <section>
-      <IoMdArrowRoundBack
-        onClick={() => navigate(-1)}
-        className={styles.svg_add}
-      />
-      <div className={styles.addpet_header}>
-        <h1>Editando o Pet: {pet.name}</h1>
-        <p>Depois da edição os dados serão atualizados no sistema</p>
-      </div>
+      <h1>Editar informações de: {pet.name}</h1>
       {!loading && (
         <PetForm
+          classStyle={true}
           handleSubmit={updatePet}
           petData={pet}
           petPosition={pet.latLong}
-          btnText="Editar"
+          btnText="Salvar"
         />
       )}
     </section>

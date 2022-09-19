@@ -12,6 +12,7 @@ function Input({
   readOnly,
   required,
   accept,
+  maxlength,
 }) {
   return (
     <div className={styles.form_input}>
@@ -28,6 +29,7 @@ function Input({
         readOnly={readOnly}
         required={required}
         accept={accept}
+        maxLength={maxlength}
       />
     </div>
   );

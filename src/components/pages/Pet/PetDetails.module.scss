@@ -1,119 +1,8 @@
-section {
-  position: relative;
-
-  .svg_add {
-      position: absolute;
-      top: 10px;
-      right: 30px;
-      font-size: 3rem;
-      color: var(--white);
-      transition: .5s;
-      cursor: pointer;
-
-      &:hover {
-        color: #7df850;
-      }
-  }
-}
-
 .pet_details_container {
   display: flex;
   margin: 16px;
   flex-wrap: wrap;
   justify-content: space-between;
-
-  .pet_images_container {
-    background-color: var(--primary);
-    border-radius: 2px;
-    margin-bottom: 16px;
-    padding: .5rem;
-    width: 100%;
-    height: 700px;
-    position: relative;
-    overflow: hidden;
-
-    .arrow {
-      transition: color .5s, background-color .5s, border-color .5s;
-      line-height: 1rem;
-      border-radius: 50%;
-      border: .5rem solid var(--primary);
-      color: var(--white);
-      background-color: var(--primary);
-      position: absolute;
-      font-size: 2.5rem;
-      top: 330px;
-      cursor: pointer;
-    }
-
-    .arrow_left {
-      left: 20px;
-    }
-
-    .arrow_right {
-      right: 20px;
-    }
-
-    .disable_button {
-      color: rgba($color: #ffffff, $alpha: 0.3);
-      border: .5rem solid transparent;
-      background-color: rgba($color: #91AE91, $alpha: 0.3);
-      cursor: default;
-    }
-
-    .pet_image {
-      background-color: var(--white);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      border-radius: 5px;
-      overflow: hidden;
-      width: 100%;
-      height: 100%;
-
-      .pet_image_tag_1 {
-        animation: swing1 .5s;
-        max-height: 100%;
-        max-width: 100%;
-      }
-
-      .pet_image_tag_0 {
-        animation: swing0 .5s;
-        max-height: 100%;
-        max-width: 100%;
-      }
-    }
-
-    .pet_images {
-      position: absolute;
-      bottom: 20px;
-      display: flex;
-      width: calc(100% - 2rem);
-      height: 50px;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-
-      img {
-        transition: width .5s, height .5s, border-color .5s;
-        object-fit: cover;
-        width: 25px;
-        height: 25px;
-        cursor: pointer;
-        border: 3px solid var(--primary);
-        border-radius: 50%;
-        & +img {
-          margin-left: 8px;
-        }
-      }
-
-      .image_list {
-        width: 40px;
-        height: 40px;
-        border: 4px solid var(--graypeti);
-      }
-    }
-  }
 
   .pet_details {
     display: flex;
@@ -199,29 +88,6 @@ section {
   }
 }
 
-
-@keyframes swing1 {
-  0% {
-    opacity: 0;
-    transform: scale(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
-@keyframes swing0 {
-  0% {
-    opacity: 0;
-    transform: scale(0);
-  }
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-
 @media (min-width: 710px) {
   .pet_details_container {
     .pet_details {
@@ -237,10 +103,6 @@ section {
 
 @media (min-width: 1080px) {
   .pet_details_container {
-    .pet_images_container {
-      width: 64.5%;
-    }
-
     .pet_details {
       width: 34%;
 

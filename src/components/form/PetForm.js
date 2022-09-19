@@ -10,13 +10,13 @@ import Map from '../layout/Map';
 /* css */
 import styles from './Form.module.scss';
 
-function PetForm({ handleSubmit, petData, petPosition, btnText }) {
+function PetForm({ handleSubmit, petData, petPosition, btnText, classStyle }) {
   const [pet, setPet] = useState(petData || {});
   const [preview, setPreview] = useState([]);
   const [imageLimitSize] = useState(2097152);
   const [imageLimitQnt] = useState(8);
-  const [selectClass1, setSelectClass1] = useState(false);
-  const [selectClass2, setSelectClass2] = useState(false);
+  const [selectClass1, setSelectClass1] = useState(classStyle || false);
+  const [selectClass2, setSelectClass2] = useState(classStyle || false);
   const [locationError, setLocationError] = useState('');
   const [position, setPosition] = useState(petPosition || []);
   const sex = ['Fêmea', 'Macho', 'Indefinido'];
@@ -47,8 +47,6 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
     setPreview(filter);
     setPet({ ...pet, images: [...filter] });
   }
-
-  console.log(preview);
 
   function handleChange(e) {
     setPet({ ...pet, [e.target.name]: e.target.value });
@@ -110,7 +108,6 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
   const submit = e => {
     e.preventDefault();
     if (position.length !== 0) {
-      console.log(pet);
       handleSubmit(pet);
     } else {
       setLocationError('* Seleciona uma posiçao dentro de Portugal');
@@ -147,10 +144,10 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
               />
             ))
           ) : (
-            <>
+            <div className={styles.prerequisite}>
               <p>Quantidade máxima de imagens: 8</p>
               <p>Tamanho máximo por imagem: 2MB</p>
-            </>
+            </div>
           )}
         </div>
         <Select
@@ -170,6 +167,7 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
           handleOnChange={handleChange}
           value={pet.specificType || ''}
           required={true}
+          maxlength="30"
         />
         <Input
           text="Nome"
@@ -179,6 +177,7 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
           handleOnChange={handleChange}
           value={pet.name || ''}
           required={true}
+          maxlength="30"
         />
         <Select
           name="sex"
@@ -282,6 +281,7 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
           handleOnChange={handleChange}
           value={pet.bio || ''}
           required={true}
+          maxlength="500"
         />
         <input type="submit" value={btnText} />
       </form>

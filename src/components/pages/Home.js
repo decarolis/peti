@@ -1,6 +1,7 @@
 import api from '../../utils/api';
 import { useNavigate } from 'react-router-dom';
 import { useState, useEffect } from 'react';
+import ModalImages from '../layout/ModalImages';
 import { BsSuitHeart, BsFillSuitHeartFill } from 'react-icons/bs';
 import { GiWeight, GiSandsOfTime } from 'react-icons/gi';
 import {
@@ -101,7 +102,7 @@ function Home() {
             },
           },
         )
-        .then(() => {
+        .then(response => {
           let updatedFavorites = [];
           if (action === 'remove') {
             updatedFavorites = favorites.filter(item => item !== id);
@@ -109,11 +110,10 @@ function Home() {
             updatedFavorites = [...favorites, id];
           }
           setFavorites(updatedFavorites);
+          setFlashMessage(response.data.message, 'success');
         })
         .catch(err => {
-          const msgType = 'error';
-          const msgText = err.response.data.message.toString();
-          setFlashMessage(msgText, msgType);
+          setFlashMessage(err.response.data.message.toString(), 'error');
         });
     } else {
       setFlashMessage(
@@ -155,12 +155,11 @@ function Home() {
           {pets.length > 0 ? (
             pets.map(pet => (
               <div className={styles.pet_card} key={pet._id}>
-                <div
-                  style={{
-                    backgroundImage: `url(${process.env.REACT_APP_API}/images/pets/${pet.images[0]})`,
-                  }}
-                  className={styles.pet_card_image}
-                ></div>
+                <ModalImages
+                  classname={'home'}
+                  image={[pet.images[0], 0]}
+                  pet={pet}
+                />
                 <div className={styles.title}>
                   <h3>{pet.name}</h3>
                   {favorites.includes(pet._id) ? (
@@ -229,7 +228,10 @@ function Home() {
                   </span>
                   {` ${pet.state},  ${pet.city}`}
                 </p>
-                <button onClick={() => handleButtonDetails(pet._id)}>
+                <button
+                  className={styles.button_home}
+                  onClick={() => handleButtonDetails(pet._id)}
+                >
                   Mais detalhes
                 </button>
               </div>

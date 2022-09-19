@@ -35,6 +35,15 @@
 
 html {
   font-size: 87.5%;
+  -ms-word-break: break-all;
+  word-break: break-all;
+
+  /* Non standard for webkit */
+  word-break: break-word;
+  -webkit-hyphens: auto;
+  -moz-hyphens: auto;
+  -ms-hyphens: auto;
+  hyphens: auto;
 }
 
 body {
@@ -56,9 +65,13 @@ h1 {
   text-align: center;
   background-color: #91AE91;
   margin: 6px 16px;
-  height: 64px;
+  min-height: 64px;
   color: var(--white);
   font-size: 1.6rem;
+  padding: 5px;
+  word-break: unset;
+  word-break: unset;
+  hyphens: none;
 }
 
 h2 {

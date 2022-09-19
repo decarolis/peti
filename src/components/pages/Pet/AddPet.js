@@ -1,19 +1,46 @@
-import { useState } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import PetForm from '../../form/PetForm';
-import { IoMdArrowRoundBack } from 'react-icons/io';
-
-/* css */
-import styles from './AddPet.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
+
+/* contexts */
+import { Context } from '../../../context/UserContext';
 
 function AddPet() {
   const [token] = useState(localStorage.getItem('token') || '');
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
+  const { logout } = useContext(Context);
+
+  useEffect(() => {
+    let mounted = true;
+    if (token) {
+      api
+        .get('/users/checkuser', {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(token)}`,
+          },
+        })
+        .catch(() => {
+          if (mounted) {
+            logout(
+              'Faça login ou registre-se para visitar esta página.',
+              'error',
+            );
+          }
+        });
+    } else if (!token) {
+      if (mounted) {
+        logout('Faça login ou registre-se para visitar esta página.', 'error');
+      }
+    }
+    return () => {
+      mounted = false;
+    };
+  }, [navigate, logout, token]);
 
   async function registerPet(pet) {
     let msgType = 'success';
@@ -72,13 +99,7 @@ function AddPet() {
 
   return (
     <section>
-      <IoMdArrowRoundBack
-        onClick={() => navigate(-1)}
-        className={styles.svg_add}
-      />
-      <div className={styles.addpet_header}>
-        <h1>Cadastre um Pet</h1>
-      </div>
+      <h1>Cadastre um Pet</h1>
       <PetForm handleSubmit={registerPet} btnText="Cadastrar" />
     </section>
   );

@@ -1,5 +1,4 @@
 .navbar {
-  border: 1px solid red;
   max-width: 1080px;
   margin: 0 auto;
   display: flex;
@@ -9,7 +8,6 @@
   color: var(--graypeti);
 
   ul {
-    border: 1px solid red;
     min-width: 100%;
     display: flex;
     justify-content: space-between;
@@ -37,7 +35,6 @@
 }
 
 .navbar_logo {
-  border: 1px solid red;
   img {
     width: 200px;
   }

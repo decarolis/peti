@@ -2,11 +2,10 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import Input from '../../form/Input';
-import RoundedImage from '../../layout/RoundedImage';
+import { TbTrashX } from 'react-icons/tb';
 
 /* css */
-import styles from './Profile.module.scss';
-import formStyles from '../../form/Form.module.scss';
+import styles from '../../form/Form.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -65,6 +64,12 @@ function Profile() {
     setUser({ ...user, [e.target.name]: e.target.files[0] });
   }
 
+  function removeImage() {
+    window.scrollTo(0, 0);
+    setPreview('');
+    setUser({ ...user, image: 'defaultimage.jpg' });
+  }
+
   const handleSubmit = async e => {
     e.preventDefault();
 
@@ -86,6 +91,7 @@ function Profile() {
         },
       })
       .then(response => {
+        window.scrollTo(0, 0);
         return response.data;
       })
       .catch(err => {
@@ -101,50 +107,65 @@ function Profile() {
     <>
       {user.name && (
         <section>
-          <div className={styles.profile_header}>
-            <h1>Perfil</h1>
-            <RoundedImage
-              src={
-                preview
-                  ? URL.createObjectURL(preview)
-                  : `${process.env.REACT_APP_API}/images/users/${user.image}`
-              }
-              alt={user.name}
-            />
-          </div>
-          <form onSubmit={handleSubmit} className={formStyles.form_container}>
-            <Input
-              text="Imagem"
-              type="file"
-              name="image"
-              handleOnChange={onFileChange}
-            />
-            <Input
-              text="E-mail"
-              type="email"
-              name="email"
-              placeholder="Digite o e-mail"
-              value={user.email || ''}
-              disabled={true}
-              readOnly={true}
-            />
-            <Input
-              text="Nome"
-              type="text"
-              name="name"
-              placeholder="Digite o nome"
-              handleOnChange={handleChange}
-              value={user.name || ''}
-            />
-            <Input
-              text="Telefone"
-              type="text"
-              name="phone"
-              placeholder="Digite o seu telefone"
-              handleOnChange={handleChange}
-              value={user.phone || ''}
-            />
-            {/* <Input
+          <h1>Perfil</h1>
+          <div className={styles.form_container_box}>
+            <form onSubmit={handleSubmit} className={styles.form_container}>
+              <Input
+                text="Adicionar Imagen"
+                type="file"
+                name="image"
+                handleOnChange={onFileChange}
+                accept="image/jpg, image/png, image/jpeg"
+              />
+              <div className={styles.preview_user_image}>
+                {preview || user.image !== 'defaultimage.jpg' ? (
+                  <>
+                    <button className={styles.remove}>
+                      <TbTrashX onClick={removeImage} />
+                    </button>
+                    <img
+                      src={
+                        preview
+                          ? URL.createObjectURL(preview)
+                          : `${process.env.REACT_APP_API}/images/users/${user.image}`
+                      }
+                      alt={user.name}
+                    />
+                  </>
+                ) : (
+                  <div className={styles.prerequisite}>
+                    <p>Adicione uma imagem ao seu perfil</p>
+                    <p>Tamanho máximo da imagem: 2MB</p>
+                    <p>Extensões suportadas: .jpg .jpeg .png</p>
+                  </div>
+                )}
+              </div>
+              <Input
+                text="E-mail"
+                type="email"
+                name="email"
+                placeholder="Digite o e-mail"
+                value={user.email || ''}
+                disabled={true}
+                readOnly={true}
+              />
+              <Input
+                text="Nome"
+                type="text"
+                name="name"
+                placeholder="Digite o nome"
+                handleOnChange={handleChange}
+                value={user.name || ''}
+              />
+              <Input
+                text="Telefone"
+                type="text"
+                name="phone"
+                placeholder="Digite o seu telefone"
+                handleOnChange={handleChange}
+                value={user.phone || ''}
+              />
+              {/* <Input
           text="Senha"
           type="password"
           name="password"
@@ -158,8 +179,9 @@ function Profile() {
           placeholder="Confirme a sua senha"
           handleOnChange={handleChange}
         /> */}
-            <input type="submit" value="Editar" />
-          </form>
+              <input type="submit" value="Salvar" />
+            </form>
+          </div>
         </section>
       )}
     </>
