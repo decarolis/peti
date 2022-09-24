@@ -9,9 +9,13 @@ import useFlashMessage from '../../../hooks/useFlashMessage';
 /* contexts */
 import { Context } from '../../../context/UserContext';
 
+/* css */
+import stylesLoader from '../../layout/Loader.module.scss';
+
 function EditPet() {
   const [pet, setPet] = useState({});
   const [loading, setLoading] = useState(true);
+  const [submiting, setSubmiting] = useState(false);
   const [token] = useState(localStorage.getItem('token') || '');
   const { id } = useParams();
   const { setFlashMessage } = useFlashMessage();
@@ -66,6 +70,7 @@ function EditPet() {
   }, [token, id, navigate, logout, loading]);
 
   async function updatePet(pet) {
+    setSubmiting(true);
     let msgType = 'success';
 
     const formData = new FormData();
@@ -102,6 +107,7 @@ function EditPet() {
         return err.response.data;
       });
 
+    setSubmiting(false);
     setFlashMessage(data.message, msgType);
     if (msgType === 'success') {
       navigate('/pet/mypets');
@@ -111,14 +117,15 @@ function EditPet() {
   return (
     <section>
       <h1>Editar informações de: {pet.name}</h1>
-      {!loading && (
+      {!loading && !submiting ? (
         <PetForm
-          classStyle={true}
           handleSubmit={updatePet}
           petData={pet}
           petPosition={pet.latLong}
           btnText="Salvar"
         />
+      ) : (
+        <div className={stylesLoader.loader}></div>
       )}
     </section>
   );

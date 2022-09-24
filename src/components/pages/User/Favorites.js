@@ -14,6 +14,7 @@ import {
 
 /* css */
 import styles from '../Home.module.scss';
+import stylesLoader from '../../layout/Loader.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -124,7 +125,7 @@ function Favorites() {
   return (
     <section>
       <h1>Meus Favoritos</h1>
-      {!loading && (
+      {!loading ? (
         <div className={styles.pet_container}>
           {pets.length > 0 ? (
             pets.map(pet => (
@@ -226,6 +227,8 @@ function Favorites() {
             </p>
           )}
         </div>
+      ) : (
+        <div className={stylesLoader.loader}></div>
       )}
     </section>
   );

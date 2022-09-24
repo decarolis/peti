@@ -1,3 +1,9 @@
+import {
+  BsFillCheckCircleFill,
+  BsFillExclamationCircleFill,
+} from 'react-icons/bs';
+
+/* css */
 import styles from './Inputs.module.scss';
 
 function Input({
@@ -13,9 +19,14 @@ function Input({
   required,
   accept,
   maxlength,
+  pattern,
+  handleOnFocus,
+  handleOnBlur,
+  validatedClass,
+  error,
 }) {
   return (
-    <div className={styles.form_input}>
+    <div className={`${styles.form_input} ${styles[validatedClass]}`}>
       <label htmlFor={name}>{text}</label>
       <input
         type={type}
@@ -30,7 +41,26 @@ function Input({
         required={required}
         accept={accept}
         maxLength={maxlength}
+        pattern={pattern}
+        onFocus={handleOnFocus}
+        onBlur={handleOnBlur}
       />
+      {validatedClass === 'error' ? (
+        <>
+          <span>
+            <BsFillExclamationCircleFill />
+          </span>
+          <p className={styles.p_error}>{error}</p>
+        </>
+      ) : validatedClass === 'success' ? (
+        <>
+          <span>
+            <BsFillCheckCircleFill />
+          </span>
+        </>
+      ) : (
+        ''
+      )}
     </div>
   );
 }

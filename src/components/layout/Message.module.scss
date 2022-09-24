@@ -1,18 +1,12 @@
-.message {
+.message_fixed, .message {
+  margin: 0 auto;
   width: 500px;
   max-width: 90%;
-  position: fixed;
-  bottom: 0;
-  z-index: 100;
-  cursor: pointer;
   border-radius: 2px;
-  bottom: 0;
-  left: 50%;
-  margin-right: -50%;
-  transform: translate(-50%, -50%);
 
   .success {
     display: flex;
+    text-align: start;
     padding: 1.5rem;
     color: #1d7732;
     background-color: #c8efc8;
@@ -26,11 +20,13 @@
   }
 
   svg {
+    min-width: 3rem;
+    height: 1rem;
     vertical-align: baseline;
   }
 
   p {
-    margin: 0 16px;
+    line-height: 1.2rem;
   }
 
   span {
@@ -38,4 +34,13 @@
   }
 }
 
+.message_fixed {
+  position: fixed;
+  z-index: 100;
+  cursor: pointer;
+  bottom: 0;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%);
 
+}

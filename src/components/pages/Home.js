@@ -14,6 +14,7 @@ import {
 
 /* css*/
 import styles from './Home.module.scss';
+import stylesLoader from '../layout/Loader.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../hooks/useFlashMessage';
@@ -150,7 +151,7 @@ function Home() {
   return (
     <section>
       <h1>Adote um Pet</h1>
-      {!loading && (
+      {!loading ? (
         <div className={styles.pet_container}>
           {pets.length > 0 ? (
             pets.map(pet => (
@@ -242,6 +243,8 @@ function Home() {
             </p>
           )}
         </div>
+      ) : (
+        <div className={stylesLoader.loader}></div>
       )}
     </section>
   );

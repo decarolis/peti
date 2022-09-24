@@ -40,7 +40,7 @@ function Message() {
 
   return (
     visibility && (
-      <div className={styles.message}>
+      <div className={styles.message_fixed}>
         <div className={` ${styles[type]} close`}>
           {type === 'error' ? (
             <BsFillExclamationCircleFill />

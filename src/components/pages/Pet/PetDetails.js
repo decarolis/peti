@@ -16,6 +16,7 @@ import Map from '../../layout/Map';
 
 /* css */
 import styles from './PetDetails.module.scss';
+import stylesLoader from '../../layout/Loader.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -134,7 +135,7 @@ function PetDetails() {
 
   return (
     <section>
-      {!loading && (
+      {!loading ? (
         <>
           <h1>Olá, meu nome é {pet.name} e preciso de um novo lar!</h1>
           <div className={styles.pet_details_container}>
@@ -242,6 +243,8 @@ function PetDetails() {
             </div>
           </div>
         </>
+      ) : (
+        <div className={stylesLoader.loader}></div>
       )}
     </section>
   );

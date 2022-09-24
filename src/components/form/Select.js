@@ -1,3 +1,9 @@
+import {
+  BsFillCheckCircleFill,
+  BsFillExclamationCircleFill,
+} from 'react-icons/bs';
+
+/* css */
 import styles from './Inputs.module.scss';
 
 function Select({
@@ -8,18 +14,23 @@ function Select({
   value,
   required,
   classname,
+  handleOnFocus,
+  handleOnBlur,
+  validatedClass,
+  error,
 }) {
-  const selectClass = classname => (classname ? styles.select_color : {});
   return (
-    <div className={styles.form_select}>
+    <div className={`${styles.form_select} ${styles[validatedClass]}`}>
       <label htmlFor={name}>{text}</label>
       <select
-        className={`${selectClass(classname)}`}
+        className={`${styles[classname]}`}
         name={name}
         id={name}
         onChange={handleOnChange}
         defaultValue={value}
         required={required}
+        onFocus={handleOnFocus}
+        onBlur={handleOnBlur}
       >
         <option disabled value="">
           Selecione uma opção
@@ -30,6 +41,22 @@ function Select({
           </option>
         ))}
       </select>
+      {validatedClass === 'error' ? (
+        <>
+          <span>
+            <BsFillExclamationCircleFill />
+          </span>
+          <p className={styles.p_error}>{error}</p>
+        </>
+      ) : validatedClass === 'success' ? (
+        <>
+          <span>
+            <BsFillCheckCircleFill />
+          </span>
+        </>
+      ) : (
+        ''
+      )}
     </div>
   );
 }

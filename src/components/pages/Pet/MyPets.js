@@ -15,6 +15,7 @@ import {
 
 /* css */
 import styles from '../Home.module.scss';
+import stylesLoader from '../../layout/Loader.module.scss';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -126,7 +127,7 @@ function MyPets() {
         onClick={() => navigate('/pet/add')}
         className={styles.svg_add}
       />
-      {!loading && (
+      {!loading ? (
         <div className={styles.pet_container}>
           {pets.length > 0 ? (
             pets.map(pet => (
@@ -230,6 +231,8 @@ function MyPets() {
             </p>
           )}
         </div>
+      ) : (
+        <div className={stylesLoader.loader}></div>
       )}
     </section>
   );

@@ -9,20 +9,28 @@ import useFlashMessage from '../../../hooks/useFlashMessage';
 /* contexts */
 import { Context } from '../../../context/UserContext';
 
+/* css */
+import stylesLoader from '../../layout/Loader.module.scss';
+
 function AddPet() {
   const [token] = useState(localStorage.getItem('token') || '');
+  const [loading, setLoading] = useState(true);
+  const [submiting, setSubmiting] = useState(false);
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
   const { logout } = useContext(Context);
 
   useEffect(() => {
     let mounted = true;
-    if (token) {
+    if (token && loading) {
       api
         .get('/users/checkuser', {
           headers: {
             Authorization: `Bearer ${JSON.parse(token)}`,
           },
+        })
+        .then(() => {
+          setLoading(false);
         })
         .catch(() => {
           if (mounted) {
@@ -40,9 +48,10 @@ function AddPet() {
     return () => {
       mounted = false;
     };
-  }, [navigate, logout, token]);
+  }, [navigate, logout, token, loading]);
 
   async function registerPet(pet) {
+    setSubmiting(true);
     let msgType = 'success';
 
     if (!pet.years) {
@@ -90,7 +99,7 @@ function AddPet() {
         msgType = 'error';
         return err.response.data;
       });
-
+    setSubmiting(false);
     setFlashMessage(data.message, msgType);
     if (msgType === 'success') {
       navigate('/pet/mypets');
@@ -100,7 +109,11 @@ function AddPet() {
   return (
     <section>
       <h1>Cadastre um Pet</h1>
-      <PetForm handleSubmit={registerPet} btnText="Cadastrar" />
+      {!loading && !submiting ? (
+        <PetForm handleSubmit={registerPet} btnText="Cadastrar" />
+      ) : (
+        <div className={stylesLoader.loader}></div>
+      )}
     </section>
   );
 }

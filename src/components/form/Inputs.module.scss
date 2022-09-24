@@ -1,16 +1,70 @@
-.form_input {
+.form_input, .form_textarea, .form_select {
   display: flex;
   flex-direction: column;
-}
 
-.form_textarea {
-  display: flex;
-  flex-direction: column;
-}
+  input, textarea {
+    background-color: var(--gray100);
+    border: none;
+    height: 3rem;
+    padding-left: .9rem;
+    border-radius: 2px;
+    color: var(--graypeti);
+    outline-color: none;
 
-.form_select {
-  display: flex;
-  flex-direction: column;
+    &::placeholder {
+      color: #999;
+      opacity: 1;
+      font-size: 1rem;
+    }
+
+    &:focus {
+      outline: solid 2px var(--primary)
+    }
+  }
+
+  textarea {
+    resize: vertical;
+    min-height: 10rem;
+    padding: .9rem;
+  }
+
+  input[disabled] {
+    background-color: var(--secondary);
+    color: #999;
+  }
+
+  input[name=images], input[name=image] {
+    position:absolute;
+    top: -2000px;
+  }
+
+  label {
+    margin-bottom: 0.4rem;
+    font-weight: bold;
+  }
+
+  label[for=images], label[for=image] {
+    border-radius: 2px 2px 0 0;
+    background-color: var(--graypeti);
+    color: var(--gray100);
+    transition: .5s;
+    border: solid 2px var(--graypeti);
+    height: 4rem;
+    line-height: 4rem;
+    width: 100%;
+    font-size: 1.2rem;
+    font-weight: bold;
+    cursor: pointer;
+    text-align: center;
+    margin: 0;
+    outline: none;
+
+    &:hover {
+      background-color: var(--gray100);
+      border: solid 2px var(--graypeti);
+      color: var(--graypeti);
+    }
+  }
 
   select {
     height: 3rem;
@@ -19,7 +73,6 @@
     border: none;
     border-radius: 2px;
     color: #999;
-    margin-bottom: 1.5rem;
 
     &:focus {
       outline: solid 2px var(--primary)
@@ -31,20 +84,81 @@
   }
 }
 
-.box_age_weight {
-  height: 3rem;
+.input_double_container {
   display: flex;
-  width: 49%;
-  background-color: var(--gray100);
-  border-radius: 2px;
+  flex-direction: column;
 
-  .fixed_text {
-    padding: 0.9rem;
-    width: 100%;
+  label {
+    margin-bottom: 0.4rem;
+    font-weight: bold;
   }
 
-  input {
-    outline: none;
+  .box {
     width: 100%;
+    height: 3rem;
+    display: flex;
+    justify-content: space-between;
+
+    .field {
+      width: 49%;
+      display: flex;
+      border-radius: 2px;
+      .fixed_text {
+        background-color: var(--gray100);
+        padding: 0.9rem;
+        width: 100%;
+      }
+
+      input {
+        background-color: var(--gray100);
+        border: none;
+        outline: none;
+        width: 100%;
+      }
+    }
+
+
+  }
+}
+
+.map {
+  position: relative;
+  width: 100%;
+  height: 400px;
+}
+
+label {
+  margin-bottom: 0.4rem;
+  font-weight: bold;
+}
+
+.p_error{
+  margin: 0.3rem 0;
+  color: #ef4d53;
+}
+
+.error {
+  white-space: pre-wrap;
+  span {
+    position: relative;
+    color: #ef4d53;
+    svg {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+    }
+  }
+}
+
+.success {
+  white-space: pre-wrap;
+  span {
+    position: relative;
+    color: #1d7732;
+    svg {
+      position: absolute;
+      bottom: 15px;
+      right: 15px;
+    }
   }
 }
