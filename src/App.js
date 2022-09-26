@@ -11,6 +11,8 @@ import Container from './components/layout/Container';
 import Home from './components/pages/Home';
 import Login from './components/pages/Auth/Login';
 import Register from './components/pages/Auth/Register';
+import NewPasswordEmail from './components/pages/Auth/NewPasswordEmail';
+import NewPasswordLink from './components/pages/Auth/NewPasswordLink';
 import Profile from './components/pages/User/Profile';
 import AddPet from './components/pages/Pet/AddPet';
 import MyPets from './components/pages/Pet/MyPets';
@@ -31,6 +33,12 @@ function App() {
         <Container>
           <Routes>
             <Route path="/login" element={<Login />} />
+            <Route path="/login/:id/verify/:token" element={<Login />} />
+            <Route path="/forgotmypassword" element={<NewPasswordEmail />} />
+            <Route
+              path="/forgotmypassword/:id/:token"
+              element={<NewPasswordLink />}
+            />
             <Route path="/register" element={<Register />} />
             <Route path="/user/profile" element={<Profile />} />
             <Route path="/user/favorites" element={<Favorites />} />

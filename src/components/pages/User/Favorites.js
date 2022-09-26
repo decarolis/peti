@@ -222,9 +222,7 @@ function Favorites() {
               </div>
             ))
           ) : (
-            <p>
-              Não há pets cadastrados ou disponíveis para adoção no momento!
-            </p>
+            <h4>Você ainda não favoritou nenhum pet!</h4>
           )}
         </div>
       ) : (

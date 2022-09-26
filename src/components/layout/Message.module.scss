@@ -1,8 +1,12 @@
 .message_fixed, .message {
   margin: 0 auto;
+  margin-top: 16px;
   width: 500px;
   max-width: 90%;
   border-radius: 2px;
+  word-break: unset;
+  word-break: unset;
+  hyphens: none;
 
   .success {
     display: flex;

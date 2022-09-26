@@ -1,11 +1,11 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { BsFillCheckCircleFill } from 'react-icons/bs';
+import {
+  BsFillCheckCircleFill,
+  BsFillExclamationCircleFill,
+} from 'react-icons/bs';
 import Input from '../../form/Input';
 import api from '../../../utils/api';
-
-/* hooks */
-import useFlashMessage from '../../../hooks/useFlashMessage';
 
 /* css */
 import styles from '../../form/Form.module.scss';
@@ -16,9 +16,10 @@ function Register() {
   const [user, setUser] = useState({});
   const [submiting, setSubmiting] = useState(false);
   const [validated, setValidated] = useState({});
+  const [emailDenied, setEmailDenied] = useState([]);
+  const [emailError, setEmailError] = useState(false);
   const [error, setError] = useState('');
-  const [message, setMessage] = useState('');
-  const { setFlashMessage } = useFlashMessage();
+  const [message, setMessage] = useState([]);
 
   console.log(user);
   console.log(validated);
@@ -33,6 +34,13 @@ function Register() {
       }
     }
     if (e.target.name === 'email') {
+      if (emailDenied.includes(e.target.value)) {
+        setEmailError(true);
+        setValidated({ ...validated, email: false });
+        return;
+      } else {
+        setEmailError(false);
+      }
       if (
         /^(([^<>()[\].,;:\s@"]+(\.[^<>()[\].,;:\s@"]+)*)|(".+"))@(([^<>()[\].,;:\s@"]+.)+[^<>()[\].,;:\s@"]{2,})$/i.test(
           e.target.value,
@@ -135,117 +143,144 @@ function Register() {
     setSubmiting(true);
     try {
       await api.post('/users/register', user).then(response => {
-        setMessage(response.data.message);
+        setMessage([response.data.message, 'success']);
         setSubmiting(false);
       });
     } catch (error) {
-      setFlashMessage(error.response.data.message, 'error');
+      setMessage([error.response.data.message, 'error']);
+      if (error.response.data.message === 'Email já cadastrado!') {
+        setEmailDenied(prev => [...prev, user.email]);
+        setEmailError(true);
+        setValidated(prev => ({ ...prev, email: false }));
+        setError('* Preencha os campos solicitados');
+      }
       setSubmiting(false);
     }
   }
+
+  console.log(emailDenied);
 
   return (
     <section>
       <h1>Registrar</h1>
       {submiting ? (
         <div className={stylesLoader.loader}></div>
-      ) : message.length === 0 ? (
-        <div className={styles.form_container_box}>
-          <form onSubmit={handleSubmit} className={styles.form_container}>
-            <Input
-              text="Nome"
-              type="text"
-              name="name"
-              placeholder="Digite seu nome"
-              handleOnChange={handleChange}
-              handleOnBlur={handleBlur}
-              validatedClass={
-                validated.name === undefined
-                  ? ''
-                  : validated.name
-                  ? 'success'
-                  : 'error'
-              }
-              error="* Insira um nome válido"
-            />
-            <Input
-              text="Telefone"
-              type="text"
-              name="phone"
-              placeholder="Digite seu telefone"
-              handleOnChange={handleChange}
-              handleOnBlur={handleBlur}
-              validatedClass={
-                validated.phone === undefined
-                  ? ''
-                  : validated.phone
-                  ? 'success'
-                  : 'error'
-              }
-              error="* Insira um telefone válido"
-            />
-            <Input
-              text="E-mail"
-              type="email"
-              name="email"
-              placeholder="Digite seu e-mail"
-              handleOnChange={handleChange}
-              handleOnBlur={handleBlur}
-              validatedClass={
-                validated.email === undefined
-                  ? ''
-                  : validated.email
-                  ? 'success'
-                  : 'error'
-              }
-              error="* Insira um email válido"
-            />
-            <Input
-              text="Senha"
-              type="password"
-              name="password"
-              placeholder="Digite sua senha"
-              handleOnChange={handleChange}
-              handleOnBlur={handleBlur}
-              validatedClass={
-                validated.password === undefined
-                  ? ''
-                  : validated.password
-                  ? 'success'
-                  : 'error'
-              }
-              error={`* Sua senha precisa conter:\n   - Ao menos 8 caracteres\n   - Uma letra\n   - Um número`}
-            />
-            <Input
-              text="Confirmação de senha"
-              type="password"
-              name="confirmpassword"
-              placeholder="Confirme sua senha"
-              handleOnChange={handleChange}
-              handleOnBlur={handleBlur}
-              validatedClass={
-                validated.confirmpassword === undefined
-                  ? ''
-                  : validated.confirmpassword
-                  ? 'success'
-                  : 'error'
-              }
-              error="* A confirmaçao de senha precisa ser igual a senha"
-            />
-            <input type="submit" value="Cadastrar" />
-            {error && <p className={styles.p_error}>{error}</p>}
-            <p className={styles.p_link}>
-              Já tem conta? <Link to="/login">Clique aqui.</Link>
-            </p>
-          </form>
-        </div>
-      ) : (
+      ) : message.length > 0 && message[1] === 'success' ? (
         <div className={messageStyles.message}>
           <div className={messageStyles.success}>
             <BsFillCheckCircleFill />
-            <p>{message}</p>
+            <p>{message[0]}</p>
           </div>
         </div>
+      ) : (
+        <>
+          {message.length > 0 && message[1] === 'error' ? (
+            <div className={messageStyles.message}>
+              <div className={messageStyles.error}>
+                <BsFillExclamationCircleFill />
+                <p>{message[0]}</p>
+              </div>
+            </div>
+          ) : null}
+          <div className={styles.form_container_box}>
+            <form onSubmit={handleSubmit} className={styles.form_container}>
+              <Input
+                text="Nome"
+                type="text"
+                name="name"
+                placeholder="Digite seu nome"
+                handleOnChange={handleChange}
+                handleOnBlur={handleBlur}
+                value={user.name || ''}
+                validatedClass={
+                  validated.name === undefined
+                    ? ''
+                    : validated.name
+                    ? 'success'
+                    : 'error'
+                }
+                error="* Insira um nome válido"
+              />
+              <Input
+                text="Telefone"
+                type="text"
+                name="phone"
+                placeholder="Digite seu telefone"
+                handleOnChange={handleChange}
+                handleOnBlur={handleBlur}
+                value={user.phone || ''}
+                validatedClass={
+                  validated.phone === undefined
+                    ? ''
+                    : validated.phone
+                    ? 'success'
+                    : 'error'
+                }
+                error="* Insira um telefone válido"
+              />
+              <Input
+                text="E-mail"
+                type="email"
+                name="email"
+                placeholder="Digite seu e-mail"
+                handleOnChange={handleChange}
+                handleOnBlur={handleBlur}
+                value={user.email || ''}
+                validatedClass={
+                  validated.email === undefined
+                    ? ''
+                    : validated.email
+                    ? 'success'
+                    : 'error'
+                }
+                error={
+                  emailError
+                    ? '* Email já cadastrado!'
+                    : '* Insira um email válido'
+                }
+              />
+              <Input
+                text="Senha"
+                type="password"
+                name="password"
+                placeholder="Digite sua senha"
+                handleOnChange={handleChange}
+                handleOnBlur={handleBlur}
+                value={user.password || ''}
+                validatedClass={
+                  validated.password === undefined
+                    ? ''
+                    : validated.password
+                    ? 'success'
+                    : 'error'
+                }
+                error={`* Sua senha precisa conter:\n   - Ao menos 8 caracteres\n   - Uma letra\n   - Um número`}
+              />
+              <Input
+                text="Confirmação de senha"
+                type="password"
+                name="confirmpassword"
+                placeholder="Confirme sua senha"
+                handleOnChange={handleChange}
+                handleOnBlur={handleBlur}
+                value={user.confirmpassword || ''}
+                validatedClass={
+                  validated.confirmpassword === undefined
+                    ? ''
+                    : validated.confirmpassword
+                    ? 'success'
+                    : 'error'
+                }
+                error="* A confirmaçao de senha precisa ser igual a senha"
+              />
+              <input type="submit" value="Cadastrar" />
+              {error && <p className={styles.p_error}>{error}</p>}
+              <p className={styles.p_link}>
+                Já tem conta? <Link to="/login">Clique aqui.</Link>
+              </p>
+            </form>
+          </div>
+        </>
       )}
     </section>
   );

@@ -2,7 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import Input from '../../form/Input';
-import { TbTrashX } from 'react-icons/tb';
+import { TbTrashX, TbChevronRight, TbChevronDown } from 'react-icons/tb';
 
 /* css */
 import styles from '../../form/Form.module.scss';
@@ -17,6 +17,7 @@ import { Context } from '../../../context/UserContext';
 function Profile() {
   const [user, setUser] = useState({});
   const [userData, setUserData] = useState({});
+  const [imageLimitSize] = useState(2097152);
   const [loading, setLoading] = useState(true);
   const [submiting, setSubmiting] = useState(false);
   const [validated, setValidated] = useState({});
@@ -27,6 +28,9 @@ function Profile() {
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
   const { logout } = useContext(Context);
+
+  console.log(user);
+  console.log(userData);
 
   useEffect(() => {
     let mounted = true;
@@ -96,7 +100,6 @@ function Profile() {
       if (
         /^(?=.*[0-9]+.*)(?=.*[a-zA-Z]+.*)[0-9a-zA-Z]{8,}$/.test(e.target.value)
       ) {
-        console.log('oi');
         setValidated({ ...validated, password: true });
       } else if (validated.password === true) {
         setValidated({ ...validated, password: false });
@@ -149,12 +152,16 @@ function Profile() {
   }
 
   function onFileChange(e) {
-    setPreview(e.target.files[0]);
-    setUser({ ...user, [e.target.name]: e.target.files[0] });
+    if (e.target.files[0].size < imageLimitSize) {
+      setPreview(e.target.files[0]);
+      setUser({ ...user, [e.target.name]: e.target.files[0] });
+    } else {
+      setPreview('');
+      setUser({ ...user, [e.target.name]: 'defaultimage.jpg' });
+    }
   }
 
   function removeImage() {
-    window.scrollTo(0, 0);
     setPreview('');
     setUser({ ...user, image: 'defaultimage.jpg' });
   }
@@ -166,7 +173,7 @@ function Profile() {
       !validated.name ||
       !validated.phone ||
       validated.password === false ||
-      !validated.confirmpassword === false
+      validated.confirmpassword === false
     ) {
       setError('* Preencha os campos solicitados');
       return;
@@ -192,7 +199,6 @@ function Profile() {
         },
       })
       .then(response => {
-        window.scrollTo(0, 0);
         return response.data;
       })
       .catch(err => {
@@ -207,11 +213,15 @@ function Profile() {
   return (
     <section>
       <h1>Perfil</h1>
-      {!loading && !submiting ? (
+      {!loading && !submiting && user.name ? (
         <div className={styles.form_container_box}>
           <form onSubmit={handleSubmit} className={styles.form_container}>
             <Input
-              text="Adicionar Imagen"
+              text={
+                preview || user.image !== 'defaultimage.jpg'
+                  ? 'Trocar imagem'
+                  : 'Adicionar imagem'
+              }
               type="file"
               name="image"
               handleOnChange={onFileChange}
@@ -283,9 +293,8 @@ function Profile() {
               }
               error="* Insira um telefone válido"
             />
-            <input
-              type="button"
-              value="Alterar senha"
+            <label
+              className={styles.change_password}
               onClick={() => {
                 if (
                   validated.password === undefined &&
@@ -294,7 +303,11 @@ function Profile() {
                   setChangePassword(prev => !prev);
                 }
               }}
-            />
+            >
+              Alterar senha{' '}
+              {changePassword ? <TbChevronDown /> : <TbChevronRight />}
+            </label>
+
             {changePassword && (
               <>
                 <Input

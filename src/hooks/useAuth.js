@@ -30,23 +30,21 @@ export default function useAuth() {
   }, []);
 
   async function login(user) {
-    let msgText = 'Login realizado com sucesso!';
-    let msgType = 'success';
-
     try {
       const data = await api.post('/users/login', user).then(response => {
         return response.data;
       });
 
       await authUser(data);
+      setFlashMessage('Login realizado com sucesso!', 'success');
+      return ['', 'success'];
     } catch (error) {
-      // tratar erro
-      msgText = error.response.data.message;
-      msgType = 'error';
+      if (error.response.status === 401) {
+        return [error.response.data.message, 'success'];
+      } else {
+        return [error.response.data.message, 'error'];
+      }
     }
-
-    setFlashMessage(msgText, msgType);
-    return;
   }
 
   async function authUser(data) {

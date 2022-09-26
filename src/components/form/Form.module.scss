@@ -28,7 +28,7 @@
       }
     }
 
-    input[type=submit], input[type=button] {
+    input[type=submit] {
       border-radius: 2px;
       background-color: var(--graypeti);
       color: var(--gray100);
@@ -49,6 +49,14 @@
         background-color: var(--gray100);
         border: solid 2px var(--graypeti);
         color: var(--graypeti);
+      }
+    }
+
+    label.change_password {
+      text-align: center;
+      cursor: pointer;
+      svg {
+        vertical-align: middle;
       }
     }
 
