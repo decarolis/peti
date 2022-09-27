@@ -179,7 +179,11 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
     <div className={styles.form_container_box}>
       <form onSubmit={submit} className={styles.form_container}>
         <Input
-          text="Adicionar Imagens"
+          text={
+            preview.length > 0 || (pet.images && pet.images.length > 0)
+              ? 'Trocar imagens'
+              : 'Adicionar imagens'
+          }
           type="file"
           name="images"
           handleOnChange={onFileChange}

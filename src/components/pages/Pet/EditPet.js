@@ -20,9 +20,7 @@ function EditPet() {
   const { id } = useParams();
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
-  const { logout, authenticated } = useContext(Context);
-
-  console.log(authenticated);
+  const { logout } = useContext(Context);
 
   const helpState = tempPet => {
     setPet(tempPet);
@@ -102,7 +100,6 @@ function EditPet() {
         return response.data;
       })
       .catch(err => {
-        console.log(err);
         msgType = 'error';
         return err.response.data;
       });

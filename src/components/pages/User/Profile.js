@@ -29,9 +29,6 @@ function Profile() {
   const navigate = useNavigate();
   const { logout } = useContext(Context);
 
-  console.log(user);
-  console.log(userData);
-
   useEffect(() => {
     let mounted = true;
     if (token && loading) {
@@ -152,9 +149,16 @@ function Profile() {
   }
 
   function onFileChange(e) {
-    if (e.target.files[0].size < imageLimitSize) {
-      setPreview(e.target.files[0]);
-      setUser({ ...user, [e.target.name]: e.target.files[0] });
+    if (e.target.files.length > 0) {
+      if (e.target.files[0].size < imageLimitSize) {
+        setPreview(e.target.files[0]);
+        setUser({ ...user, [e.target.name]: e.target.files[0] });
+        setValidated({ ...validated, image: true });
+      } else {
+        setValidated({ ...validated, image: false });
+        setPreview('');
+        setUser({ ...user, [e.target.name]: 'defaultimage.jpg' });
+      }
     } else {
       setPreview('');
       setUser({ ...user, [e.target.name]: 'defaultimage.jpg' });
@@ -168,6 +172,7 @@ function Profile() {
 
   const handleSubmit = async e => {
     e.preventDefault();
+    setValidated({ ...validated, image: true });
 
     if (
       !validated.name ||
@@ -192,7 +197,7 @@ function Profile() {
     formData.append('user', userFormData);
 
     const data = await api
-      .patch(`/users/edit/${user._id}`, formData, {
+      .patch(`/users/edit`, formData, {
         headers: {
           Authorization: `Bearer ${JSON.parse(token)}`,
           'Content-Type': 'multipart/form-data',
@@ -202,10 +207,17 @@ function Profile() {
         return response.data;
       })
       .catch(err => {
-        console.log(err);
         msgType = 'error';
+        setPreview('');
+        setUser({ ...user, image: userData.image });
         return err.response.data;
       });
+    setValidated({
+      ...validated,
+      password: undefined,
+      confirmpassword: undefined,
+      image: undefined,
+    });
     setSubmiting(false);
     setFlashMessage(data.message, msgType);
   };
@@ -213,7 +225,7 @@ function Profile() {
   return (
     <section>
       <h1>Perfil</h1>
-      {!loading && !submiting && user.name ? (
+      {!loading && !submiting && user.name !== undefined ? (
         <div className={styles.form_container_box}>
           <form onSubmit={handleSubmit} className={styles.form_container}>
             <Input
@@ -250,6 +262,9 @@ function Profile() {
                 </div>
               )}
             </div>
+            {validated.image === false && (
+              <p className={styles.p_error}>* Tamanho máximo da imagem: 2MB</p>
+            )}
             <Input
               text="E-mail"
               type="email"
@@ -298,7 +313,7 @@ function Profile() {
               onClick={() => {
                 if (
                   validated.password === undefined &&
-                  validated.password === undefined
+                  validated.confirmpassword === undefined
                 ) {
                   setChangePassword(prev => !prev);
                 }
