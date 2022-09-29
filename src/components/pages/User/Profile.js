@@ -157,17 +157,17 @@ function Profile() {
       } else {
         setValidated({ ...validated, image: false });
         setPreview('');
-        setUser({ ...user, [e.target.name]: 'defaultimage.jpg' });
+        setUser({ ...user, [e.target.name]: '' });
       }
     } else {
       setPreview('');
-      setUser({ ...user, [e.target.name]: 'defaultimage.jpg' });
+      setUser({ ...user, [e.target.name]: '' });
     }
   }
 
   function removeImage() {
     setPreview('');
-    setUser({ ...user, image: 'defaultimage.jpg' });
+    setUser({ ...user, image: '' });
   }
 
   const handleSubmit = async e => {
@@ -230,9 +230,7 @@ function Profile() {
           <form onSubmit={handleSubmit} className={styles.form_container}>
             <Input
               text={
-                preview || user.image !== 'defaultimage.jpg'
-                  ? 'Trocar imagem'
-                  : 'Adicionar imagem'
+                preview || user.image ? 'Trocar imagem' : 'Adicionar imagem'
               }
               type="file"
               name="image"
@@ -240,7 +238,7 @@ function Profile() {
               accept="image/jpg, image/png, image/jpeg"
             />
             <div className={styles.preview_user_image}>
-              {preview || user.image !== 'defaultimage.jpg' ? (
+              {preview || user.image ? (
                 <>
                   <button className={styles.remove}>
                     <TbTrashX onClick={removeImage} />
@@ -249,7 +247,7 @@ function Profile() {
                     src={
                       preview
                         ? URL.createObjectURL(preview)
-                        : `${process.env.REACT_APP_API}/images/users/${user.image}`
+                        : `${process.env.REACT_APP_API}/images/users/${user._id}/${user.image}`
                     }
                     alt={user.name}
                   />

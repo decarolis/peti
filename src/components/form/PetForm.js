@@ -202,7 +202,7 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
           ) : pet.images && pet.images.length > 0 ? (
             pet.images.map((image, index) => (
               <img
-                src={`${process.env.REACT_APP_API}/images/pets/${image}`}
+                src={`${process.env.REACT_APP_API}/images/pets/${pet._id}/${image}`}
                 alt={pet.name}
                 key={`${pet.name}+${index}`}
               />

@@ -1,0 +1,19 @@
+.peti_container {
+  display: flex;
+  margin: 8px;
+  padding: 8px;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  img {
+    width: 100%;
+  }
+}
+
+@media (min-width: 710px) {
+  .peti_container {
+    img {
+      width: 49% ;
+    }
+  }
+}

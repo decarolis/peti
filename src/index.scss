@@ -15,7 +15,7 @@
   --gray800: #29292e;
   --graypeti: #272833;
   --gray900: #121214;
-  --primary: #91AE91;
+  --primary: #5AAF9B;
   --secondary: #fff0ef;
   --secondary-p: #7a645e;
   --tertiary: #F5DEDC;
@@ -63,8 +63,8 @@ h1 {
   justify-content: center;
   align-items: center;
   text-align: center;
-  background-color: #91AE91;
-  margin: 6px 16px;
+  background-color: var(--primary);
+  margin: 0 16px 8px 16px;
   min-height: 64px;
   color: var(--white);
   font-size: 1.6rem;
@@ -104,7 +104,7 @@ button {
 
   &:hover {
     background-color: var(--graypeti);
-    color: var(--white);
+    color: var(--gray100);
   }
 }
 
@@ -117,4 +117,8 @@ button {
   border: 1px solid var(--gray300);
   border-radius: 2px;
   z-index: 1;
+}
+
+.active {
+  border-bottom: 2px solid var(--primary);
 }

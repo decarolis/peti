@@ -21,9 +21,6 @@ function Register() {
   const [error, setError] = useState('');
   const [message, setMessage] = useState([]);
 
-  console.log(user);
-  console.log(validated);
-
   function handleChange(e) {
     setUser({ ...user, [e.target.name]: e.target.value });
     if (e.target.name === 'name') {
@@ -157,8 +154,6 @@ function Register() {
       setSubmiting(false);
     }
   }
-
-  console.log(emailDenied);
 
   return (
     <section>

@@ -13,7 +13,7 @@ import {
 } from 'react-icons/tb';
 
 /* css */
-import styles from '../Home.module.scss';
+import styles from '../Adopt.module.scss';
 import stylesLoader from '../../layout/Loader.module.scss';
 
 /* hooks */
@@ -42,8 +42,8 @@ function Favorites() {
         })
         .then(response => {
           if (mounted) {
-            setLoading(false);
             setPets(response.data.pets);
+            setLoading(false);
           }
         })
         .catch(() => {

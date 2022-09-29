@@ -8,7 +8,8 @@ import Footer from './components/layout/Footer';
 import Container from './components/layout/Container';
 
 /* pages */
-import Home from './components/pages/Home';
+import Peti from './components/pages/Peti';
+import Adopt from './components/pages/Adopt';
 import Login from './components/pages/Auth/Login';
 import Register from './components/pages/Auth/Register';
 import NewPasswordEmail from './components/pages/Auth/NewPasswordEmail';
@@ -46,7 +47,8 @@ function App() {
             <Route path="/pet/edit/:id" element={<EditPet />} />
             <Route path="/pet/mypets" element={<MyPets />} />
             <Route path="/pet/:id" element={<PetDetails />} />
-            <Route path="/" element={<Home />} />
+            <Route path="/adopt" element={<Adopt />} />
+            <Route path="/" element={<Peti />} />
           </Routes>
         </Container>
         <Footer />
