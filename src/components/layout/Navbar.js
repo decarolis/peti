@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom';
-import { useContext, useEffect, useState } from 'react';
+import { useContext, useState } from 'react';
 import Logo from '../../assets/img/logo.png';
 import { TiThMenu } from 'react-icons/ti';
 
@@ -8,36 +8,10 @@ import styles from './Navbar.module.scss';
 
 /* contexts */
 import { Context } from '../../context/UserContext';
-import api from '../../utils/api';
 
 function Navbar() {
   const [menu, setMenu] = useState(false);
-  const [userName, setUserName] = useState('');
-  const [token] = useState(localStorage.getItem('token') || '');
-  const { logout, authenticated } = useContext(Context);
-
-  useEffect(() => {
-    let mounted = true;
-    if (authenticated && token) {
-      api
-        .get('/users/checkuser', {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(token)}`,
-          },
-        })
-        .then(response => {
-          if (mounted) {
-            setUserName(response.data.name.split(' ')[0]);
-          }
-        })
-        .catch(() => {
-          return;
-        });
-    }
-    return () => {
-      mounted = false;
-    };
-  }, [token, authenticated]);
+  const { logout, authenticated, userName } = useContext(Context);
 
   return (
     <nav

@@ -7,6 +7,7 @@ import useFlashMessage from './useFlashMessage';
 export default function useAuth() {
   const [authenticated, setAuthenticated] = useState(false);
   const [loading, setLoading] = useState(true);
+  const [userName, setUserName] = useState('');
   const navigate = useNavigate();
   const { setFlashMessage } = useFlashMessage();
 
@@ -17,9 +18,21 @@ export default function useAuth() {
 
     if (token) {
       api.defaults.headers.Authorization = `Bearer ${JSON.parse(token)}`;
-      if (mounted) {
-        setAuthenticated(true);
-      }
+      api
+        .get('/users/checkuser', {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(token)}`,
+          },
+        })
+        .then(response => {
+          if (mounted) {
+            setAuthenticated(true);
+            setUserName(response.data.name.split(' ')[0]);
+          }
+        })
+        .catch(() => {
+          return;
+        });
     }
     if (mounted) {
       setLoading(false);
@@ -48,8 +61,10 @@ export default function useAuth() {
   }
 
   async function authUser(data) {
-    setAuthenticated(true);
+    console.log(data);
     localStorage.setItem('token', JSON.stringify(data.token));
+    setUserName(data.userName.split(' ')[0]);
+    setAuthenticated(true);
 
     navigate('/');
   }
@@ -66,5 +81,5 @@ export default function useAuth() {
     setFlashMessage(msgText, msgType);
   }
 
-  return { authenticated, loading, login, logout };
+  return { authenticated, loading, login, logout, userName };
 }
