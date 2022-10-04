@@ -247,7 +247,7 @@ function Profile() {
                     src={
                       preview
                         ? URL.createObjectURL(preview)
-                        : `${process.env.REACT_APP_API}/images/users/${user._id}/${user.image}`
+                        : `https://api.peti.pt/images/users/${user._id}/${user.image}`
                     }
                     alt={user.name}
                   />

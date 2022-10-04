@@ -70,7 +70,7 @@ function ModalImages({ image, pet, classname }) {
               ? styles.pet_image_tag_0
               : styles.pet_image_tag_1
           }`}
-          src={`${process.env.REACT_APP_API}/images/pets/${pet._id}/${mainImage[0]}`}
+          src={`https://api.peti.pt/images/pets/${pet._id}/${mainImage[0]}`}
           alt={pet.name}
         />
       </div>
@@ -79,7 +79,7 @@ function ModalImages({ image, pet, classname }) {
           <img
             onClick={() => handleMainImage(image, index)}
             key={index}
-            src={`${process.env.REACT_APP_API}/images/pets/${pet._id}/${image}`}
+            src={`https://api.peti.pt/images/pets/${pet._id}/${image}`}
             alt={pet.name}
             className={handleImageList(image, index)}
           />

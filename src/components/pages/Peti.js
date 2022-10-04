@@ -33,7 +33,7 @@ function Peti() {
           <h1>Petí na Tv</h1>
           <div className={styles.peti_container}>
             <video
-              src={`${process.env.REACT_APP_API}/videos/peti.mp4`}
+              src={`https://api.peti.pt/videos/peti.mp4`}
               width="100%"
               controls="controls"
               poster={ManhaCm}
