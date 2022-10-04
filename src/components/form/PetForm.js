@@ -10,8 +10,15 @@ import Map from '../layout/Map';
 /* css */
 import styles from './Form.module.scss';
 
-function PetForm({ handleSubmit, petData, petPosition, btnText }) {
+function PetForm({
+  handleSubmit,
+  petData,
+  petPosition,
+  btnText,
+  petFilterField,
+}) {
   const [pet, setPet] = useState(petData || {});
+  const [petFilter] = useState(petFilterField);
   const [preview, setPreview] = useState([]);
   const [imageLimitSize] = useState(2097152);
   const [imageLimitQnt] = useState(8);
@@ -19,6 +26,7 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
   const [position, setPosition] = useState(petPosition || []);
   const [validated, setValidated] = useState({});
   const [error, setError] = useState('');
+  const sort = ['Mais recentes primeiro', 'Mais antigos primeiro'];
   const sex = ['Fêmea', 'Macho', 'Indefinido'];
   const types = [
     'Cão',
@@ -175,228 +183,330 @@ function PetForm({ handleSubmit, petData, petPosition, btnText }) {
     handleSubmit(pet);
   };
 
+  const filterSubmit = e => {
+    e.preventDefault();
+    handleSubmit(pet);
+  };
+
+  const cleanFilterFields = () => {
+    setPet({});
+    handleSubmit({});
+  };
+
   return (
-    <div className={styles.form_container_box}>
-      <form onSubmit={submit} className={styles.form_container}>
-        <Input
-          text={
-            preview.length > 0 || (pet.images && pet.images.length > 0)
-              ? 'Trocar imagens'
-              : 'Adicionar imagens'
-          }
-          type="file"
-          name="images"
-          handleOnChange={onFileChange}
-          multiple={true}
-          accept="image/jpg, image/png, image/jpeg"
-        />
-        <div className={styles.preview_pet_images}>
-          {preview.length > 0 ? (
-            preview.map((image, index) => (
-              <img
-                src={URL.createObjectURL(image)}
-                alt={pet.name}
-                key={`${pet.name}+${index}`}
-              />
-            ))
-          ) : pet.images && pet.images.length > 0 ? (
-            pet.images.map((image, index) => (
-              <img
-                src={`${process.env.REACT_APP_API}/images/pets/${pet._id}/${image}`}
-                alt={pet.name}
-                key={`${pet.name}+${index}`}
-              />
-            ))
-          ) : (
-            <div className={styles.prerequisite}>
-              <p>Quantidade máxima de imagens: 8</p>
-              <p>Tamanho máximo por imagem: 2MB</p>
-              <p>Imagens maiores que 2MB serão ignoradas</p>
-            </div>
-          )}
-        </div>
-        {validated.images === false && (
-          <p className={styles.p_error}>* Insira ao menos uma imagem</p>
-        )}
-        <Select
-          name="type"
-          text="Selecione o tipo"
-          options={types}
-          handleOnChange={handleSelect}
-          handleOnBlur={handleBlur}
-          classname={pet.type ? 'select_color' : ''}
-          value={pet.type || ''}
-          validatedClass={
-            validated.type === undefined
-              ? ''
-              : validated.type
-              ? 'success'
-              : 'error'
-          }
-          error="* Selecione uma opção"
-        />
-        <Input
-          text="Especifique o tipo"
-          type="text"
-          name="specificType"
-          placeholder="ex: Labrador"
-          handleOnChange={handleChange}
-          handleOnBlur={handleBlur}
-          value={pet.specificType || ''}
-          maxlength="30"
-          validatedClass={
-            validated.specificType === undefined
-              ? ''
-              : validated.specificType
-              ? 'success'
-              : 'error'
-          }
-          error="* Especifique o tipo"
-        />
-        <Input
-          text="Nome"
-          type="text"
-          name="name"
-          placeholder="Digite o nome"
-          handleOnChange={handleChange}
-          handleOnBlur={handleBlur}
-          value={pet.name || ''}
-          maxlength="30"
-          validatedClass={
-            validated.name === undefined
-              ? ''
-              : validated.name
-              ? 'success'
-              : 'error'
-          }
-          error="* Insira um nome válido"
-        />
-        <Select
-          name="sex"
-          text="Selecione o sexo"
-          options={sex}
-          handleOnChange={handleSelect}
-          handleOnBlur={handleBlur}
-          classname={pet.sex ? 'select_color' : ''}
-          value={pet.sex || ''}
-          validatedClass={
-            validated.sex === undefined
-              ? ''
-              : validated.sex
-              ? 'success'
-              : 'error'
-          }
-          error="* Selecione uma opção"
-        />
-        <InputDouble
-          label="Idade"
-          text1="Anos:"
-          text2="Meses:"
-          name1="years"
-          name2="months"
-          placeholder1="0"
-          placeholder2="0"
-          handleOnChange={handleChange}
-          handleOnBlur={handleBlur}
-          value1={pet.years || ''}
-          value2={pet.months || ''}
-          min1="0"
-          min2="0"
-          max1="999"
-          max2="12"
-          validatedClass={
-            validated.years === undefined && validated.months === undefined
-              ? ''
-              : validated.years || validated.months
-              ? 'success'
-              : 'error'
-          }
-          error="* Insira uma idade válida"
-        />
-        <InputDouble
-          label="Peso"
-          text1="Kg:"
-          text2="g:"
-          name1="weightKg"
-          name2="weightG"
-          placeholder1="0"
-          placeholder2="0"
-          handleOnChange={handleChange}
-          handleOnBlur={handleBlur}
-          value1={pet.weightKg || ''}
-          value2={pet.weightG || ''}
-          min1="0"
-          min2="0"
-          max1="9999"
-          max2="900"
-          step="100"
-          validatedClass={
-            validated.weightKg === undefined && validated.weightG === undefined
-              ? ''
-              : validated.weightKg || validated.weightG
-              ? 'success'
-              : 'error'
-          }
-          error="* Insira um peso válido"
-        />
-        <Map
-          text="Localização"
-          Location={LocationFinderDummy}
-          position={position}
-          locationError={locationError}
-        />
-        {position.length > 0 && (
+    <div
+      className={
+        petFilter ? styles.form_filter_container_box : styles.form_container_box
+      }
+    >
+      <form
+        onSubmit={!petFilter ? submit : filterSubmit}
+        className={
+          petFilter ? styles.form_filter_container : styles.form_container
+        }
+      >
+        {!petFilter ? (
           <>
             <Input
-              text="Distrito"
-              type="text"
-              name="state"
-              placeholder="Selecione um ponto no mapa"
-              value={pet.state || ''}
-              disabled={true}
-              readOnly={true}
-              validatedClass={'success'}
+              text={
+                preview.length > 0 || (pet.images && pet.images.length > 0)
+                  ? 'Trocar imagens'
+                  : 'Adicionar imagens'
+              }
+              type="file"
+              name="images"
+              handleOnChange={onFileChange}
+              multiple={true}
+              accept="image/jpg, image/png, image/jpeg"
+            />
+            <div className={styles.preview_pet_images}>
+              {preview.length > 0 ? (
+                preview.map((image, index) => (
+                  <img
+                    src={URL.createObjectURL(image)}
+                    alt={pet.name}
+                    key={`${pet.name}+${index}`}
+                  />
+                ))
+              ) : pet.images && pet.images.length > 0 ? (
+                pet.images.map((image, index) => (
+                  <img
+                    src={`${process.env.REACT_APP_API}/images/pets/${pet._id}/${image}`}
+                    alt={pet.name}
+                    key={`${pet.name}+${index}`}
+                  />
+                ))
+              ) : (
+                <div className={styles.prerequisite}>
+                  <p>Quantidade máxima de imagens: 8</p>
+                  <p>Tamanho máximo por imagem: 2MB</p>
+                  <p>Imagens maiores que 2MB serão ignoradas</p>
+                </div>
+              )}
+            </div>
+            {validated.images === false && (
+              <p className={styles.p_error}>* Insira ao menos uma imagem</p>
+            )}
+            <Select
+              name="type"
+              text="Selecione o tipo"
+              options={types}
+              handleOnChange={handleSelect}
+              handleOnBlur={handleBlur}
+              classname={pet.type ? 'select_color' : ''}
+              value={pet.type || ''}
+              validatedClass={
+                validated.type === undefined
+                  ? ''
+                  : validated.type
+                  ? 'success'
+                  : 'error'
+              }
+              error="* Selecione uma opção"
             />
             <Input
-              text="Cidade"
+              text="Especifique o tipo"
               type="text"
-              name="city"
-              placeholder="Selecione um ponto no mapa"
-              value={pet.city || ''}
-              disabled={true}
-              readOnly={true}
-              validatedClass={'success'}
+              name="specificType"
+              placeholder="ex: Labrador"
+              handleOnChange={handleChange}
+              handleOnBlur={handleBlur}
+              value={pet.specificType || ''}
+              maxlength="30"
+              validatedClass={
+                validated.specificType === undefined
+                  ? ''
+                  : validated.specificType
+                  ? 'success'
+                  : 'error'
+              }
+              error="* Especifique o tipo"
             />
             <Input
-              text="Freguesia"
+              text="Nome"
               type="text"
-              name="district"
-              placeholder="Selecione um ponto no mapa"
-              value={pet.district || ''}
-              disabled={true}
-              readOnly={true}
-              validatedClass={'success'}
+              name="name"
+              placeholder="Digite o nome"
+              handleOnChange={handleChange}
+              handleOnBlur={handleBlur}
+              value={pet.name || ''}
+              maxlength="30"
+              validatedClass={
+                validated.name === undefined
+                  ? ''
+                  : validated.name
+                  ? 'success'
+                  : 'error'
+              }
+              error="* Insira um nome válido"
+            />
+            <Select
+              name="sex"
+              text="Selecione o sexo"
+              options={sex}
+              handleOnChange={handleSelect}
+              handleOnBlur={handleBlur}
+              classname={pet.sex ? 'select_color' : ''}
+              value={pet.sex || ''}
+              validatedClass={
+                validated.sex === undefined
+                  ? ''
+                  : validated.sex
+                  ? 'success'
+                  : 'error'
+              }
+              error="* Selecione uma opção"
+            />
+            <InputDouble
+              label="Idade"
+              text1="Anos:"
+              text2="Meses:"
+              name1="years"
+              name2="months"
+              placeholder1="0"
+              placeholder2="0"
+              handleOnChange={handleChange}
+              handleOnBlur={handleBlur}
+              value1={pet.years || ''}
+              value2={pet.months || ''}
+              min1="0"
+              min2="0"
+              max1="999"
+              max2="12"
+              validatedClass={
+                validated.years === undefined && validated.months === undefined
+                  ? ''
+                  : validated.years || validated.months
+                  ? 'success'
+                  : 'error'
+              }
+              error="* Insira uma idade válida"
+            />
+            <InputDouble
+              label="Peso"
+              text1="Kg:"
+              text2="g:"
+              name1="weightKg"
+              name2="weightG"
+              placeholder1="0"
+              placeholder2="0"
+              handleOnChange={handleChange}
+              handleOnBlur={handleBlur}
+              value1={pet.weightKg || ''}
+              value2={pet.weightG || ''}
+              min1="0"
+              min2="0"
+              max1="9999"
+              max2="900"
+              step="100"
+              validatedClass={
+                validated.weightKg === undefined &&
+                validated.weightG === undefined
+                  ? ''
+                  : validated.weightKg || validated.weightG
+                  ? 'success'
+                  : 'error'
+              }
+              error="* Insira um peso válido"
+            />
+            <Map
+              text="Localização"
+              Location={LocationFinderDummy}
+              position={position}
+              locationError={locationError}
+            />
+            {position.length > 0 && (
+              <>
+                <Input
+                  text="Distrito"
+                  type="text"
+                  name="state"
+                  placeholder="Selecione um ponto no mapa"
+                  value={pet.state || ''}
+                  disabled={true}
+                  readOnly={true}
+                  validatedClass={'success'}
+                />
+                <Input
+                  text="Cidade"
+                  type="text"
+                  name="city"
+                  placeholder="Selecione um ponto no mapa"
+                  value={pet.city || ''}
+                  disabled={true}
+                  readOnly={true}
+                  validatedClass={'success'}
+                />
+                <Input
+                  text="Freguesia"
+                  type="text"
+                  name="district"
+                  placeholder="Selecione um ponto no mapa"
+                  value={pet.district || ''}
+                  disabled={true}
+                  readOnly={true}
+                  validatedClass={'success'}
+                />
+              </>
+            )}
+            <TextArea
+              text="Bio"
+              name="bio"
+              placeholder="Conte-nos um pouco sobre seu pet"
+              handleOnChange={handleChange}
+              handleOnBlur={handleBlur}
+              value={pet.bio || ''}
+              maxlength="500"
+              validatedClass={
+                validated.bio === undefined
+                  ? ''
+                  : validated.bio
+                  ? 'success'
+                  : 'error'
+              }
+              error="* Conte-nos um pouco sobre seu pet"
+            />
+          </>
+        ) : (
+          <>
+            <Select
+              name="sort"
+              text="Ordenar pesquisa"
+              options={sort}
+              filter={true}
+              handleOnChange={handleSelect}
+              classname={'select_color'}
+              value={pet.sort || ''}
+            />
+            <Select
+              name="type"
+              text="Tipo"
+              options={types}
+              handleOnChange={handleSelect}
+              classname={pet.type ? 'select_color' : ''}
+              value={pet.type || ''}
+            />
+            <InputDouble
+              label="Anos de idade"
+              text1="De:"
+              text2="Até:"
+              name1="minAge"
+              name2="maxAge"
+              handleOnChange={handleChange}
+              value1={pet.minAge || ''}
+              value2={pet.maxAge || ''}
+              min1="0"
+              min2="0"
+              max1="999"
+              max2="999"
+            />
+            <InputDouble
+              label="Peso em quilos (Kg)"
+              text1="De:"
+              text2="Até:"
+              name1="minWeight"
+              name2="maxWeight"
+              handleOnChange={handleChange}
+              value1={pet.minWeight || ''}
+              value2={pet.maxWeight || ''}
+              min1="0"
+              min2="0"
+              max1="9999"
+              max2="9999"
+            />
+            <Select
+              name="sex"
+              text="Sexo"
+              options={sex}
+              handleOnChange={handleSelect}
+              classname={pet.sex ? 'select_color' : ''}
+              value={pet.sex || ''}
+            />
+            <Input
+              text="Localização"
+              type="text"
+              name="location"
+              placeholder="Digite o distrito, cidade ou bairro"
+              handleOnChange={handleChange}
+              value={pet.location || ''}
+              maxlength="200"
+            />
+            <Input
+              text="Pesquisar"
+              type="text"
+              name="search"
+              placeholder="Digite as palavras chaves"
+              handleOnChange={handleChange}
+              value={pet.search || ''}
+              maxlength="200"
+              searchClass={true}
             />
           </>
         )}
-        <TextArea
-          text="Bio"
-          name="bio"
-          placeholder="Conte-nos um pouco sobre seu pet"
-          handleOnChange={handleChange}
-          handleOnBlur={handleBlur}
-          value={pet.bio || ''}
-          maxlength="500"
-          validatedClass={
-            validated.bio === undefined
-              ? ''
-              : validated.bio
-              ? 'success'
-              : 'error'
-          }
-          error="* Conte-nos um pouco sobre seu pet"
-        />
         <input type="submit" value={btnText} />
+        {petFilter && (
+          <input type="button" onClick={cleanFilterFields} value="Limpar" />
+        )}
         {error && <p className={styles.p_error}>{error}</p>}
       </form>
     </div>

@@ -18,6 +18,7 @@ function Select({
   handleOnBlur,
   validatedClass,
   error,
+  filter,
 }) {
   return (
     <div className={`${styles.form_select} ${styles[validatedClass]}`}>
@@ -32,9 +33,11 @@ function Select({
         onFocus={handleOnFocus}
         onBlur={handleOnBlur}
       >
-        <option disabled value="">
-          Selecione uma opção
-        </option>
+        {!filter && (
+          <option value="">
+            {text === 'Tipo' || text === 'Sexo' ? '' : 'Selecione uma opção'}
+          </option>
+        )}
         {options.map(option => (
           <option value={option} key={option}>
             {option}

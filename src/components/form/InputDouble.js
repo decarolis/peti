@@ -38,7 +38,6 @@ function InputDouble({
           <input
             type="number"
             name={name1}
-            id={name}
             onChange={handleOnChange}
             value={value1}
             placeholder={placeholder1}
@@ -53,7 +52,6 @@ function InputDouble({
           <input
             type="number"
             name={name2}
-            id={name}
             onChange={handleOnChange}
             value={value2}
             placeholder={placeholder2}

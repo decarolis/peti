@@ -37,6 +37,7 @@ function Peti() {
               width="100%"
               controls="controls"
               poster={ManhaCm}
+              crossOrigin="anonymous"
             />
           </div>
         </>

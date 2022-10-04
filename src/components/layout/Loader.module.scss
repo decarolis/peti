@@ -1,8 +1,8 @@
 .loader {
   display: inline-block;
-  position: fixed;
-  bottom: 50%;
+  position: relative;
   left: 50%;
+  margin-top: 100px;
   margin-right: -50%;
   transform: translate(-50%, -50%);
   width: 80px;

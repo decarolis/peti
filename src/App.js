@@ -20,6 +20,7 @@ import MyPets from './components/pages/Pet/MyPets';
 import EditPet from './components/pages/Pet/EditPet';
 import PetDetails from './components/pages/Pet/PetDetails';
 import Favorites from './components/pages/User/Favorites';
+import NotFound from './components/pages/NotFound';
 
 /* contexts */
 import { UserProvider } from './context/UserContext';
@@ -49,6 +50,7 @@ function App() {
             <Route path="/pet/:id" element={<PetDetails />} />
             <Route path="/adopt" element={<Adopt />} />
             <Route path="/" element={<Peti />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </Container>
         <Footer />
