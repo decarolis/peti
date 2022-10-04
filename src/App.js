@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import React from 'react';
-import {} from 'dotenv/config';
 
 /* components */
 import Navbar from './components/layout/Navbar';
