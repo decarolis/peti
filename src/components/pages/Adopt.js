@@ -180,14 +180,14 @@ function Home() {
   }
 
   function handleButtonDetails(id) {
-    if (token) {
-      navigate(`/pet/${id}`);
-    } else {
-      setFlashMessage(
-        'Faça login ou registre-se para ver detalhes do pet',
-        'error',
-      );
-    }
+    // if (token) {
+    navigate(`/pet/${id}`);
+    // } else {
+    //   setFlashMessage(
+    //     'Faça login ou registre-se para ver detalhes do pet',
+    //     'error',
+    //   );
+    // }
   }
 
   function filterPet(pet) {

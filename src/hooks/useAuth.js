@@ -61,7 +61,6 @@ export default function useAuth() {
   }
 
   async function authUser(data) {
-    console.log(data);
     localStorage.setItem('token', JSON.stringify(data.token));
     setUserName(data.userName.split(' ')[0]);
     setAuthenticated(true);

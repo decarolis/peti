@@ -77,11 +77,11 @@ function PetDetails() {
             );
           }
         });
-    } else if (!token) {
-      if (mounted) {
-        logout('Faça login ou registre-se para visitar esta página.', 'error');
-      }
-    }
+    } //else if (!token) {
+    //   if (mounted) {
+    //     logout('Faça login ou registre-se para visitar esta página.', 'error');
+    //   }
+    // }
     return () => {
       mounted = false;
     };
