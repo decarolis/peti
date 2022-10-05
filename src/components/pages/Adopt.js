@@ -70,7 +70,7 @@ function Home() {
     );
     intersectionObserver.observe(document.querySelector('#sentinela'));
     return () => intersectionObserver.disconnect();
-  }, [obj.total, obj.pets.length]);
+  }, [obj.total, obj.pets.length, loading]);
 
   useEffect(() => {
     let mounted = true;
