@@ -79,11 +79,7 @@ function PetDetails() {
         });
     } else {
       api
-        .get(`/pets/${id}`, {
-          headers: {
-            Authorization: `Bearer ${JSON.parse(token)}`,
-          },
-        })
+        .get(`/pets/${id}`)
         .then(response => {
           tempPet = response.data.pet;
           if (mounted) {
