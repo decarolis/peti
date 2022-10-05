@@ -52,7 +52,8 @@ function Home() {
           entries.some(entry => entry.isIntersecting) &&
           entries[0].isVisible &&
           obj.pets.length !== obj.total &&
-          obj.pets.length !== 0
+          obj.pets.length !== 0 &&
+          !loading
         ) {
           setObj(prev => ({ ...prev, page: prev.page + 1 }));
         }
