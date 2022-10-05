@@ -77,6 +77,27 @@ function PetDetails() {
             );
           }
         });
+    } else {
+      api
+        .get(`/pets/${id}`, {
+          headers: {
+            Authorization: `Bearer ${JSON.parse(token)}`,
+          },
+        })
+        .then(response => {
+          tempPet = response.data.pet;
+          if (mounted) {
+            helpState(tempPet, tempFavorites);
+          }
+        })
+        .catch(() => {
+          if (mounted) {
+            logout(
+              'Faça login ou registre-se para visitar esta página.',
+              'error',
+            );
+          }
+        });
     } //else if (!token) {
     //   if (mounted) {
     //     logout('Faça login ou registre-se para visitar esta página.', 'error');
