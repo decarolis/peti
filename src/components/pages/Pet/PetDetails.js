@@ -35,7 +35,7 @@ function PetDetails() {
   const navigate = useNavigate();
   const { logout } = useContext(Context);
 
-  const helpState = (tempPet, tempFavorites) => {
+  const helpState = (tempPet, tempFavorites = []) => {
     setReq(false);
     setFavorites(tempFavorites);
     setPet(tempPet);
@@ -87,7 +87,7 @@ function PetDetails() {
         .then(response => {
           tempPet = response.data.pet;
           if (mounted) {
-            helpState(tempPet, tempFavorites);
+            helpState(tempPet);
           }
         })
         .catch(() => {
