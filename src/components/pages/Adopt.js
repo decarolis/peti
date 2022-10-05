@@ -59,9 +59,8 @@ function Home() {
         }
       },
       {
-        root: document.body,
-        rootMargin: '0px',
-        threshold: 0,
+        root: null,
+        threshold: 0.1,
 
         /* required options*/
         trackVisibility: true,
@@ -337,8 +336,8 @@ function Home() {
       <div
         style={
           obj.pets.length === obj.total
-            ? { display: 'none', color: 'transparent' }
-            : { display: 'block', color: 'transparent' }
+            ? { display: 'none', color: '#f4f6fc' }
+            : { display: 'block', color: '#f4f6fc' }
         }
         id="sentinela"
       >
