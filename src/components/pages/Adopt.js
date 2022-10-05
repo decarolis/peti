@@ -59,7 +59,7 @@ function Home() {
         }
       },
       {
-        root: null,
+        root: document.body,
         rootMargin: '0px',
         threshold: 0,
 
