@@ -31,7 +31,7 @@ function Navbar() {
             <NavLink to="/">Petí</NavLink>
           </li>
           <li>
-            <NavLink to="/Adopt">Adotar Pet</NavLink>
+            <NavLink to="/Adopt">Adotar</NavLink>
           </li>
 
           {authenticated ? (
