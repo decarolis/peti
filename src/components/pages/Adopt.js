@@ -59,7 +59,6 @@ function Home() {
         }
       },
       {
-        root: null,
         threshold: 0.1,
 
         /* required options*/
