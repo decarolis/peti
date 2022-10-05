@@ -249,6 +249,7 @@ function Profile() {
                         ? URL.createObjectURL(preview)
                         : `https://api.peti.pt/images/users/${user._id}/${user.image}`
                     }
+                    crossOrigin="anonymous"
                     alt={user.name}
                   />
                 </>

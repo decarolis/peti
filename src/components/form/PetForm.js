@@ -223,6 +223,7 @@ function PetForm({
               {preview.length > 0 ? (
                 preview.map((image, index) => (
                   <img
+                    crossOrigin="anonymous"
                     src={URL.createObjectURL(image)}
                     alt={pet.name}
                     key={`${pet.name}+${index}`}
@@ -231,6 +232,7 @@ function PetForm({
               ) : pet.images && pet.images.length > 0 ? (
                 pet.images.map((image, index) => (
                   <img
+                    crossOrigin="anonymous"
                     src={`https://api.peti.pt/images/pets/${pet._id}/${image}`}
                     alt={pet.name}
                     key={`${pet.name}+${index}`}

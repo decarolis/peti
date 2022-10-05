@@ -70,6 +70,7 @@ function ModalImages({ image, pet, classname }) {
               ? styles.pet_image_tag_0
               : styles.pet_image_tag_1
           }`}
+          crossOrigin="anonymous"
           src={`https://api.peti.pt/images/pets/${pet._id}/${mainImage[0]}`}
           alt={pet.name}
         />
@@ -77,6 +78,7 @@ function ModalImages({ image, pet, classname }) {
       <div className={styles.pet_images}>
         {pet.images.map((image, index) => (
           <img
+            crossOrigin="anonymous"
             onClick={() => handleMainImage(image, index)}
             key={index}
             src={`https://api.peti.pt/images/pets/${pet._id}/${image}`}
