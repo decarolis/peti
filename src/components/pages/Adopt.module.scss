@@ -65,6 +65,10 @@ section {
       margin-top: auto;
     }
 
+    button {
+      color: var(--gray100);
+    }
+
     .div_buttons_confirmation {
       animation: swing .5s;
       button {
