@@ -1,4 +1,4 @@
-# Peti
+# Petí
 
 React application that consumes private api located on google cloud platform and uses Sass for styles.
 
@@ -25,7 +25,7 @@ node.js ^14
 Make a clone of this repository and install it in your development environment using the following command in your terminal (choose an appropriate directory):
 
 ```
-git clone https://github.com/decarolis/webskills.git
+git clone https://github.com/decarolis/peti.git
 
 ```
 
