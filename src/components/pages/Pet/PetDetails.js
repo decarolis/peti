@@ -13,6 +13,7 @@ import {
   TbMapPin,
 } from 'react-icons/tb';
 import Map from '../../layout/Map';
+import ReactGA from 'react-ga';
 
 /* css */
 import styles from './PetDetails.module.scss';
@@ -34,6 +35,10 @@ function PetDetails() {
   const { id } = useParams();
   const navigate = useNavigate();
   const { logout } = useContext(Context);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   const helpState = (tempPet, tempFavorites = []) => {
     setReq(false);

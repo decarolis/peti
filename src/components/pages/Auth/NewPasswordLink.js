@@ -6,6 +6,7 @@ import {
 } from 'react-icons/bs';
 import api from '../../../utils/api';
 import Input from '../../form/Input';
+import ReactGA from 'react-ga';
 
 /* css*/
 import styles from '../../form/Form.module.scss';
@@ -20,6 +21,10 @@ function NewPasswordLink() {
   const [submiting, setSubmiting] = useState(false);
   const [url, setUrl] = useState(true);
   const { id, token } = useParams();
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     setUrl(true);

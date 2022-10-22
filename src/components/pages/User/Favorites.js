@@ -15,6 +15,7 @@ import {
 /* css */
 import styles from '../Adopt.module.scss';
 import stylesLoader from '../../layout/Loader.module.scss';
+import ReactGA from 'react-ga';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -30,6 +31,10 @@ function Favorites() {
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
   const { logout } = useContext(Context);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     let mounted = true;

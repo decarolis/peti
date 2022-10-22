@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import PetForm from '../../form/PetForm';
+import ReactGA from 'react-ga';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -21,6 +22,10 @@ function EditPet() {
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
   const { logout } = useContext(Context);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   const helpState = tempPet => {
     setPet(tempPet);

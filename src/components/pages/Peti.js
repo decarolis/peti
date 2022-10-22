@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import ManhaCm from '../../assets/img/manhacm.jpeg';
 import Peti1 from '../../assets/img/peti1.jpg';
 import Peti2 from '../../assets/img/peti2.jpg';
+import ReactGA from 'react-ga';
 
 /* css*/
 import styles from './Peti.module.scss';
@@ -9,6 +10,10 @@ import stylesLoader from '../layout/Loader.module.scss';
 
 function Peti() {
   const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     let mounted = true;

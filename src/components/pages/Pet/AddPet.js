@@ -2,6 +2,7 @@ import { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import PetForm from '../../form/PetForm';
+import ReactGA from 'react-ga';
 
 /* hooks */
 import useFlashMessage from '../../../hooks/useFlashMessage';
@@ -19,6 +20,10 @@ function AddPet() {
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
   const { logout } = useContext(Context);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     let mounted = true;

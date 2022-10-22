@@ -12,6 +12,7 @@ import {
   TbMapPin,
   TbTrashX,
 } from 'react-icons/tb';
+import ReactGA from 'react-ga';
 
 /* css */
 import styles from '../Adopt.module.scss';
@@ -31,6 +32,10 @@ function MyPets() {
   const { setFlashMessage } = useFlashMessage();
   const { logout } = useContext(Context);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     let mounted = true;

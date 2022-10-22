@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BsFillExclamationCircleFill,
@@ -6,6 +6,7 @@ import {
 } from 'react-icons/bs';
 import api from '../../../utils/api';
 import Input from '../../form/Input';
+import ReactGA from 'react-ga';
 
 /* css*/
 import styles from '../../form/Form.module.scss';
@@ -21,6 +22,10 @@ function NewPasswordEmail() {
   const [message, setMessage] = useState([]);
   const [submiting, setSubmiting] = useState(false);
   const [body, setBody] = useState(true);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   function handleChange(e) {
     setUser({ ...user, [e.target.name]: e.target.value });

@@ -12,6 +12,7 @@ import {
   TbInfoCircle,
   TbMapPin,
 } from 'react-icons/tb';
+import ReactGA from 'react-ga';
 
 /* pages */
 import ModalImages from '../layout/ModalImages';
@@ -44,6 +45,10 @@ function Home() {
   const [filter, setFilter] = useState(false);
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     const intersectionObserver = new IntersectionObserver(

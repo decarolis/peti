@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import api from '../../../utils/api';
 import Input from '../../form/Input';
 import { TbTrashX, TbChevronRight, TbChevronDown } from 'react-icons/tb';
+import ReactGA from 'react-ga';
 
 /* css */
 import styles from '../../form/Form.module.scss';
@@ -28,6 +29,10 @@ function Profile() {
   const { setFlashMessage } = useFlashMessage();
   const navigate = useNavigate();
   const { logout } = useContext(Context);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   useEffect(() => {
     let mounted = true;

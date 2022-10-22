@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   BsFillCheckCircleFill,
@@ -6,6 +6,7 @@ import {
 } from 'react-icons/bs';
 import Input from '../../form/Input';
 import api from '../../../utils/api';
+import ReactGA from 'react-ga';
 
 /* css */
 import styles from '../../form/Form.module.scss';
@@ -20,6 +21,10 @@ function Register() {
   const [emailError, setEmailError] = useState(false);
   const [error, setError] = useState('');
   const [message, setMessage] = useState([]);
+
+  useEffect(() => {
+    ReactGA.pageview(window.location.pathname);
+  }, []);
 
   function handleChange(e) {
     setUser({ ...user, [e.target.name]: e.target.value });
